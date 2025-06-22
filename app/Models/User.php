@@ -45,4 +45,35 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    // Relationships
+    public function userProfile()
+    {
+        return $this->hasOne(UserProfile::class);
+    }
+
+    public function weightLogs()
+    {
+        return $this->hasMany(WeightLog::class);
+    }
+
+    public function foods()
+    {
+        return $this->hasMany(Food::class, 'created_by_user_id');
+    }
+
+    public function calorieEntries()
+    {
+        return $this->hasMany(CalorieEntry::class);
+    }
+
+    public function userFavoriteFoods()
+    {
+        return $this->hasMany(UserFavoriteFood::class);
+    }
+
+    public function calorieSummaries()
+    {
+        return $this->hasMany(CalorieSummary::class);
+    }
 }
