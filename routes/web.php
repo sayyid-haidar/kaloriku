@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\OnboardingController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -12,11 +13,20 @@ Route::get('/', function () {
         'laravelVersion' => Application::VERSION,
         'phpVersion' => PHP_VERSION,
     ]);
-});
+})->name('welcome');
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
+
+// Onboarding Routes
+Route::middleware('auth')->group(function () {
+    Route::get('/onboarding/profile', [OnboardingController::class, 'showProfileForm'])->name('onboarding.profile');
+    Route::post('/onboarding/profile', [OnboardingController::class, 'storeProfile']);
+    Route::get('/onboarding/activity', [OnboardingController::class, 'showActivityForm'])->name('onboarding.activity');
+    Route::post('/onboarding/activity', [OnboardingController::class, 'storeActivityAndCalculate']);
+    Route::get('/onboarding/result', [OnboardingController::class, 'showResult'])->name('onboarding.result');
+});
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
