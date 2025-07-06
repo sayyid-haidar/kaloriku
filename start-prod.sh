@@ -13,6 +13,13 @@ if [ ! -f .env.docker ]; then
     cp .env.example .env.docker
 fi
 
+# Ensure APP_KEY is set in .env.docker
+if ! grep -q "^APP_KEY=base64:" .env.docker; then
+    echo "🔑 Generating APP_KEY for .env.docker..."
+    APP_KEY="base64:$(openssl rand -base64 32)"
+    sed -i '' "s/^APP_KEY=.*/APP_KEY=${APP_KEY}/" .env.docker
+fi
+
 # Copy production environment file
 cp .env.docker .env
 
@@ -43,6 +50,21 @@ until docker compose exec mysql mysqladmin ping -h"localhost" --silent; do
     sleep 5
 done
 echo "✅ Database is ready!"
+
+# Ensure APP_KEY is set inside the container
+echo "🔑 Ensuring APP_KEY is set inside container..."
+docker compose exec app bash -c '
+# Check if .env exists, if not copy from .env.docker
+if [ ! -f /var/www/.env ]; then
+    cp /var/www/.env.docker /var/www/.env
+fi
+
+# Generate APP_KEY if not present
+if [ -z "$(grep "^APP_KEY=base64:" /var/www/.env)" ]; then
+    echo "Generating APP_KEY inside container..."
+    php artisan key:generate --force
+fi
+'
 
 # Run migrations and seeders
 echo "📊 Running database migrations..."

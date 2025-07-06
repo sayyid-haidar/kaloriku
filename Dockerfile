@@ -13,6 +13,8 @@ RUN apt-get update \
     libonig-dev \
     libzip-dev \
     && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath zip \
+    && pecl install redis \
+    && docker-php-ext-enable redis \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
