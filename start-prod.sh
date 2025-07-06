@@ -27,6 +27,11 @@ cp .env.docker .env
 echo "🧹 Cleaning up previous containers..."
 docker compose --profile production down -v 2>/dev/null || true
 
+# Build production assets locally first
+echo "🎨 Building production assets..."
+npm install
+npm run build
+
 # Build and start production services
 echo "🔨 Building and starting production services..."
 docker compose --profile production up --build -d
@@ -74,6 +79,7 @@ echo "🌱 Seeding database..."
 docker compose exec app php artisan db:seed --force
 
 echo "⚡ Optimizing application for production..."
+docker compose exec app php artisan optimize:clear
 docker compose exec app php artisan config:cache
 docker compose exec app php artisan route:cache
 docker compose exec app php artisan view:cache
