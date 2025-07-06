@@ -51,8 +51,10 @@ docker compose exec app php artisan migrate --force
 echo "🌱 Seeding database..."
 docker compose exec app php artisan db:seed --force
 
-echo "🔗 Creating storage link..."
-docker compose exec app php artisan storage:link
+echo "⚡ Optimizing application for production..."
+docker compose exec app php artisan config:cache
+docker compose exec app php artisan route:cache
+docker compose exec app php artisan view:cache
 
 echo "✅ Production environment is ready!"
 echo ""
