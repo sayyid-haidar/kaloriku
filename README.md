@@ -294,21 +294,21 @@ cd kaloriKu
 
 ```bash
 # Development
-docker-compose --profile dev --profile tools up -d
+docker compose --profile dev --profile tools up -d
 
 # Production
-docker-compose --profile production up --build -d
+docker compose --profile production up --build -d
 
 # View logs
-docker-compose logs -f app-dev  # Development
-docker-compose logs -f app      # Production
+docker compose logs -f app-dev  # Development
+docker compose logs -f app      # Production
 
 # Execute artisan commands
-docker-compose exec app-dev php artisan migrate
-docker-compose exec app-dev php artisan tinker
+docker compose exec app-dev php artisan migrate
+docker compose exec app-dev php artisan tinker
 
 # Stop services
-docker-compose down
+docker compose down
 ```
 
 ### 📖 Documentation
@@ -394,7 +394,7 @@ git pull origin main
 ./start-prod.sh
 
 # Atau manual
-docker-compose --profile production up --build -d
+docker compose --profile production up --build -d
 ```
 
 ### Environment Variables
@@ -414,22 +414,22 @@ REDIS_HOST=redis
 ### Health Checks
 ```bash
 # Container status
-docker-compose ps
+docker compose ps
 
 # Resource usage
 docker stats
 
 # Application logs
-docker-compose logs -f app
+docker compose logs -f app
 ```
 
 ### Backup
 ```bash
 # Database backup
-docker-compose exec mysql mysqldump -u kaloriku -psecret123 kaloriku > backup.sql
+docker compose exec mysql mysqldump -u kaloriku -psecret123 kaloriku > backup.sql
 
 # Redis backup
-docker-compose exec redis redis-cli --rdb /data/dump.rdb
+docker compose exec redis redis-cli --rdb /data/dump.rdb
 ```
 
 ---
