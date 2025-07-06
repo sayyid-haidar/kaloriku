@@ -1,0 +1,208 @@
+version: '3.8'
+
+services:
+  # Main Application
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: kaloriku:latest
+    container_name: kaloriku_app
+    restart: unless-stopped
+    ports:
+      - "8000:80"
+    volumes:
+      - ./storage:/var/www/storage
+      - ./bootstrap/cache:/var/www/bootstrap/cache
+      - ./public/storage:/var/www/public/storage
+    environment:
+      - APP_ENV=production
+      - APP_DEBUG=false
+      - DB_HOST=mysql
+      - DB_DATABASE=kaloriku
+      - DB_USERNAME=kaloriku
+      - DB_PASSWORD=secret123
+      - REDIS_HOST=redis
+      - CACHE_STORE=redis
+      - SESSION_DRIVER=redis
+      - QUEUE_CONNECTION=redis
+    depends_on:
+      - mysql
+      - redis
+    networks:
+      - kaloriku_network
+
+  # Development Environment
+  app-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: kaloriku_dev
+    restart: unless-stopped
+    ports:
+      - "8001:8000"
+      - "5173:5173"
+    volumes:
+      - .:/var/www
+      - /var/www/vendor
+      - /var/www/node_modules
+    environment:
+      - APP_ENV=local
+      - APP_DEBUG=true
+      - DB_HOST=mysql
+      - DB_DATABASE=kaloriku
+      - DB_USERNAME=kaloriku
+      - DB_PASSWORD=secret123
+      - REDIS_HOST=redis
+    depends_on:
+      - mysql
+      - redis
+    networks:
+      - kaloriku_network
+    profiles:
+      - dev
+
+  # MySQL Database
+  mysql:
+    image: mysql:8.0
+    container_name: kaloriku_mysql
+    restart: unless-stopped
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_DATABASE: kaloriku
+      MYSQL_USER: kaloriku
+      MYSQL_PASSWORD: secret123
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./docker/mysql/init:/docker-entrypoint-initdb.d
+    command: --default-authentication-plugin=mysql_native_password
+    networks:
+      - kaloriku_network
+
+  # Redis Cache & Session
+  redis:
+    image: redis:7-alpine
+    container_name: kaloriku_redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes --requirepass redis123
+    networks:
+      - kaloriku_network
+
+  # Queue Worker
+  queue:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: kaloriku:latest
+    container_name: kaloriku_queue
+    restart: unless-stopped
+    volumes:
+      - ./storage:/var/www/storage
+    environment:
+      - APP_ENV=production
+      - DB_HOST=mysql
+      - DB_DATABASE=kaloriku
+      - DB_USERNAME=kaloriku
+      - DB_PASSWORD=secret123
+      - REDIS_HOST=redis
+      - QUEUE_CONNECTION=redis
+    depends_on:
+      - mysql
+      - redis
+    command: php artisan queue:work --sleep=3 --tries=3 --timeout=30
+    networks:
+      - kaloriku_network
+
+  # Scheduler/Cron
+  scheduler:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: kaloriku:latest
+    container_name: kaloriku_scheduler
+    restart: unless-stopped
+    volumes:
+      - ./storage:/var/www/storage
+    environment:
+      - APP_ENV=production
+      - DB_HOST=mysql
+      - DB_DATABASE=kaloriku
+      - DB_USERNAME=kaloriku
+      - DB_PASSWORD=secret123
+      - REDIS_HOST=redis
+    depends_on:
+      - mysql
+      - redis
+    command: crond -f
+    networks:
+      - kaloriku_network
+
+  # phpMyAdmin
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: kaloriku_phpmyadmin
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    environment:
+      PMA_HOST: mysql
+      PMA_USER: kaloriku
+      PMA_PASSWORD: secret123
+      MYSQL_ROOT_PASSWORD: root123
+    depends_on:
+      - mysql
+    networks:
+      - kaloriku_network
+    profiles:
+      - tools
+
+  # Redis Commander
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    container_name: kaloriku_redis_commander
+    restart: unless-stopped
+    ports:
+      - "8081:8081"
+    environment:
+      REDIS_HOSTS: local:redis:6379:0:redis123
+    depends_on:
+      - redis
+    networks:
+      - kaloriku_network
+    profiles:
+      - tools
+
+  # Nginx Load Balancer (Production)
+  nginx:
+    image: nginx:alpine
+    container_name: kaloriku_nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./docker/nginx/ssl:/etc/nginx/ssl
+      - ./public:/var/www/public
+    depends_on:
+      - app
+    networks:
+      - kaloriku_network
+    profiles:
+      - production
+
+volumes:
+  mysql_data:
+    driver: local
+  redis_data:
+    driver: local
+
+networks:
+  kaloriku_network:
+    driver: bridge
