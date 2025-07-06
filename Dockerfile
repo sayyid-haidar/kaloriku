@@ -30,12 +30,15 @@ RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
 COPY composer.json composer.lock ./
 RUN composer install --no-dev --optimize-autoloader --no-scripts
 
-# Copy package.json and install Node dependencies
+# Copy package.json and install ALL dependencies (including devDependencies for build)
 COPY package.json package-lock.json* ./
-RUN npm ci --only=production
+RUN npm ci
 
 # Copy application files
 COPY . .
+
+# Build frontend assets (BEFORE setting permissions and copying configs)
+RUN npm run build
 
 # Set permissions
 RUN chown -R www-data:www-data /var/www \
@@ -48,8 +51,8 @@ COPY docker/nginx/default.conf /etc/nginx/sites-available/default
 # Copy supervisor configuration
 COPY docker/supervisor/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
-# Build frontend assets
-RUN npm run build
+# Clean up node_modules to reduce image size (after build)
+RUN rm -rf node_modules
 
 # Generate application key and optimize
 RUN php artisan key:generate \
