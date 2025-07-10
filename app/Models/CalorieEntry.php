@@ -14,6 +14,10 @@ class CalorieEntry extends Model
         'entry_date',
     ];
 
+    protected $casts = [
+        'entry_date' => 'date',
+    ];
+
     // Relationships
     public function user()
     {

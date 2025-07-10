@@ -1,5 +1,9 @@
 <?php
 
+use App\Http\Controllers\CalorieEntryController;
+use App\Http\Controllers\FavoriteFoodController;
+use App\Http\Controllers\HistoryController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OnboardingController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
@@ -15,9 +19,24 @@ Route::get('/', function () {
     ]);
 })->name('welcome');
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+// Main app routes
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/home', [HomeController::class, 'index'])->name('home');
+    Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
+
+    // Calorie Entry Routes
+    Route::get('/add-food', [CalorieEntryController::class, 'create'])->name('calorie.create');
+    Route::post('/add-food', [CalorieEntryController::class, 'store'])->name('calorie.store');
+    Route::post('/add-to-favorites', [CalorieEntryController::class, 'addToFavorites'])->name('calorie.add-favorite');
+    Route::delete('/remove-from-favorites', [CalorieEntryController::class, 'removeFromFavorites'])->name('calorie.remove-favorite');
+
+    // History Routes
+    Route::get('/history', [HistoryController::class, 'index'])->name('history.index');
+
+    // Favorite Foods Routes
+    Route::get('/favorites', [FavoriteFoodController::class, 'index'])->name('favorites.index');
+    Route::delete('/favorites/{id}', [FavoriteFoodController::class, 'destroy'])->name('favorites.destroy');
+});
 
 // Onboarding Routes
 Route::middleware('auth')->group(function () {
@@ -29,8 +48,10 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update.put');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 

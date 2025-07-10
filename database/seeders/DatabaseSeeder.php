@@ -15,6 +15,7 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             ActivityLevelSeeder::class,
+            FoodSeeder::class,
         ]);
 
         // Only create test users if we're not in production
