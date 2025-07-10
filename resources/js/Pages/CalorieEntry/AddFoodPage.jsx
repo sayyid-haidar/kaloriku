@@ -63,7 +63,7 @@ export default function AddFood({ foods, favoriteFoods }) {
     };
 
     return (
-        <MobileLayout>
+        <MobileLayout showAddButton={false}>
             <Head title="Tambah Makanan" />
 
             <div className="px-6 py-6">

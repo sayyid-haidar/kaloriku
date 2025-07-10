@@ -15,7 +15,7 @@ export default function FavoriteFood({ favoriteFoods }) {
     };
 
     return (
-        <MobileLayout>
+        <MobileLayout showAddButton={false}>
             <Head title="Makanan Favorit" />
 
             <div className="px-6 py-6">

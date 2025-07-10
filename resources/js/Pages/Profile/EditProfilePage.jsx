@@ -35,7 +35,7 @@ export default function EditProfilePage({ auth, userProfile, activityLevels }) {
     };
 
     return (
-        <MobileLayout>
+        <MobileLayout showAddButton={false}>
             <Head title="Edit Profil" />
 
             {/* Header */}

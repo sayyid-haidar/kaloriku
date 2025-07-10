@@ -6,7 +6,7 @@ import {
     ChevronRightIcon
 } from '@heroicons/react/24/outline';
 
-export default function ProfilePage({ auth, userProfile, activityLevel }) {
+export default function ProfilePage({ auth, userProfile, activityLevel, status }) {
     const { post } = useForm();
 
     const handleLogout = () => {
@@ -14,7 +14,7 @@ export default function ProfilePage({ auth, userProfile, activityLevel }) {
     };
 
     return (
-        <MobileLayout>
+        <MobileLayout showAddButton={false}>
             <Head title="Profil" />
 
             {/* Header */}
@@ -29,6 +29,12 @@ export default function ProfilePage({ auth, userProfile, activityLevel }) {
             </div>
 
             <div className="bg-gray-50 min-h-screen pb-20">
+                {/* Success Message */}
+                {status && (
+                    <div className="mx-4 mt-4 p-4 bg-green-50 border border-green-200 rounded-lg">
+                        <p className="text-green-800 text-sm">{status}</p>
+                    </div>
+                )}
                 {/* User Info Section */}
                 <div className="bg-white px-4 py-6 border-b border-gray-200">
                     <div className="flex items-center justify-between">
@@ -76,6 +82,21 @@ export default function ProfilePage({ auth, userProfile, activityLevel }) {
                         className="flex items-center justify-between px-4 py-4 hover:bg-gray-50"
                     >
                         <p className="text-gray-900">Daftar Makanan Favorit Saya</p>
+                        <ChevronRightIcon className="h-5 w-5 text-gray-400" />
+                    </Link>
+                </div>
+
+                {/* Security Section */}
+                <div className="bg-white mt-6 mx-4 rounded-lg shadow-sm">
+                    <div className="px-4 py-3 border-b border-gray-100">
+                        <h3 className="text-lg font-medium text-gray-900">Keamanan</h3>
+                    </div>
+
+                    <Link
+                        href="/profile/password"
+                        className="flex items-center justify-between px-4 py-4 hover:bg-gray-50"
+                    >
+                        <p className="text-gray-900">Ubah Password</p>
                         <ChevronRightIcon className="h-5 w-5 text-gray-400" />
                     </Link>
                 </div>

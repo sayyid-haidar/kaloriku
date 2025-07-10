@@ -9,6 +9,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -34,6 +35,7 @@ class ProfileController extends Controller
             ],
             'userProfile' => $userProfile,
             'activityLevel' => $activityLevel,
+            'status' => session('status'),
         ]);
     }
 
@@ -126,6 +128,33 @@ class ProfileController extends Controller
         }
 
         return Redirect::route('profile.index')->with('status', 'Profil berhasil diperbarui!');
+    }
+
+    /**
+     * Display the password update form.
+     */
+    public function showPasswordForm(Request $request): Response
+    {
+        return Inertia::render('Profile/UpdatePasswordPage', [
+            'status' => session('status'),
+        ]);
+    }
+
+    /**
+     * Update the user's password.
+     */
+    public function updatePassword(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'current_password' => ['required', 'current_password'],
+            'password' => ['required', 'confirmed', 'min:8'],
+        ]);
+
+        $request->user()->update([
+            'password' => Hash::make($request->password),
+        ]);
+
+        return Redirect::route('profile.index')->with('status', 'Password berhasil diubah!');
     }
 
     /**

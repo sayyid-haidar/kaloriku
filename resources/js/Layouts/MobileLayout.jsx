@@ -13,7 +13,7 @@ import {
     HeartIcon as HeartSolid
 } from '@heroicons/react/24/solid';
 
-export default function MobileLayout({ children }) {
+export default function MobileLayout({ children, showAddButton = true }) {
     const { url } = usePage();
 
     const navigation = [
@@ -80,12 +80,14 @@ export default function MobileLayout({ children }) {
                 </nav>
 
                 {/* Floating Add Button */}
-                <Link
-                    href="/add-food"
-                    className="absolute bottom-24 right-6 bg-blue-600 hover:bg-blue-700 text-white rounded-full p-4 shadow-lg transition-colors z-10"
-                >
-                    <PlusIcon className="h-6 w-6" />
-                </Link>
+                {showAddButton && (
+                    <Link
+                        href="/add-food"
+                        className="absolute bottom-24 right-6 bg-blue-600 hover:bg-blue-700 text-white rounded-full p-4 shadow-lg transition-colors z-10"
+                    >
+                        <PlusIcon className="h-6 w-6" />
+                    </Link>
+                )}
             </div>
         </div>
     );
