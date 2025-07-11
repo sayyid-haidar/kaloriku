@@ -168,11 +168,11 @@ services:
       - ./public:/var/www/public
     depends_on:
       - app
-      - telescope
     networks:
       - kaloriku_network
     profiles:
       - production
+      - monitoring
 
   # Laravel Telescope (Monitoring & Debugging)
   telescope:

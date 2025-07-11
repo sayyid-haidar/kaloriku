@@ -5,13 +5,17 @@
 set -e  # Exit on any error
 
 # Parse command line arguments
-ENABLE_MONITORING=false
+ENABLE_MONITORING=true  # Default enabled for production monitoring
 ENABLE_TOOLS=false
 
 while [[ $# -gt 0 ]]; do
     case $1 in
+        --no-monitoring)
+            ENABLE_MONITORING=false
+            shift
+            ;;
         --monitoring)
-            ENABLE_MONITORING=true
+            ENABLE_MONITORING=true  # Explicitly enable (already default)
             shift
             ;;
         --tools)
@@ -27,16 +31,17 @@ while [[ $# -gt 0 ]]; do
             echo "Usage: $0 [OPTIONS]"
             echo ""
             echo "Options:"
-            echo "  --monitoring    Enable Telescope monitoring"
-            echo "  --tools         Enable development tools (phpMyAdmin, Redis Commander)"
-            echo "  --all          Enable both monitoring and tools"
-            echo "  -h, --help     Show this help message"
+            echo "  --monitoring       Enable Telescope monitoring (DEFAULT)"
+            echo "  --no-monitoring    Disable Telescope monitoring"
+            echo "  --tools           Enable development tools (phpMyAdmin, Redis Commander)"
+            echo "  --all             Enable both monitoring and tools"
+            echo "  -h, --help        Show this help message"
             echo ""
             echo "Examples:"
-            echo "  $0                    # Production only"
-            echo "  $0 --monitoring       # Production + Telescope"
-            echo "  $0 --tools           # Production + Tools"
-            echo "  $0 --all             # Production + Monitoring + Tools"
+            echo "  $0                       # Production + Telescope (default)"
+            echo "  $0 --no-monitoring       # Production only (no monitoring)"
+            echo "  $0 --tools              # Production + Telescope + Tools"
+            echo "  $0 --all                # Production + Monitoring + Tools"
             exit 0
             ;;
         *)
