@@ -52,6 +52,7 @@ services:
       - DB_USERNAME=kaloriku
       - DB_PASSWORD=secret123
       - REDIS_HOST=redis
+      - TELESCOPE_ENABLED=true
     depends_on:
       - mysql
       - redis
@@ -198,6 +199,38 @@ services:
       - kaloriku_network
     profiles:
       - production
+
+  # Laravel Telescope (Monitoring & Debugging)
+  telescope:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: kaloriku:latest
+    container_name: kaloriku_telescope
+    restart: unless-stopped
+    ports:
+      - "8082:80"
+    volumes:
+      - ./storage:/var/www/storage
+      - ./bootstrap/cache:/var/www/bootstrap/cache
+    environment:
+      - APP_ENV=local
+      - APP_DEBUG=true
+      - DB_HOST=mysql
+      - DB_DATABASE=kaloriku
+      - DB_USERNAME=kaloriku
+      - DB_PASSWORD=secret123
+      - REDIS_HOST=redis
+      - TELESCOPE_ENABLED=true
+      - CACHE_STORE=redis
+      - SESSION_DRIVER=redis
+    depends_on:
+      - mysql
+      - redis
+    networks:
+      - kaloriku_network
+    profiles:
+      - monitoring
 
 volumes:
   mysql_data:

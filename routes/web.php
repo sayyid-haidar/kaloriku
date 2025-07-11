@@ -6,6 +6,7 @@ use App\Http\Controllers\HistoryController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OnboardingController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\StatisticsController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -27,14 +28,25 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Calorie Entry Routes
     Route::get('/add-food', [CalorieEntryController::class, 'create'])->name('calorie.create');
     Route::post('/add-food', [CalorieEntryController::class, 'store'])->name('calorie.store');
-    Route::post('/add-to-favorites', [CalorieEntryController::class, 'addToFavorites'])->name('calorie.add-favorite');
-    Route::delete('/remove-from-favorites', [CalorieEntryController::class, 'removeFromFavorites'])->name('calorie.remove-favorite');
+
+    // Quick Add API Routes
+    Route::post('/api/calorie/quick-add', [CalorieEntryController::class, 'quickAdd'])->name('calorie.quick-add');
+    Route::get('/api/calorie/recent-foods', [CalorieEntryController::class, 'getRecentFoods'])->name('calorie.recent-foods');
+
+    // Favorite Food Management (API-like routes for AJAX)
+    Route::post('/api/favorites/add', [CalorieEntryController::class, 'addToFavorites'])->name('calorie.add-favorite');
+    Route::delete('/api/favorites/remove', [CalorieEntryController::class, 'removeFromFavorites'])->name('calorie.remove-favorite');
 
     // History Routes
     Route::get('/history', [HistoryController::class, 'index'])->name('history.index');
 
+    // Statistics Routes
+    Route::get('/statistics/weekly', [StatisticsController::class, 'weekly'])->name('statistics.weekly');
+    Route::get('/statistics/monthly', [StatisticsController::class, 'monthly'])->name('statistics.monthly');
+
     // Favorite Foods Routes
     Route::get('/favorites', [FavoriteFoodController::class, 'index'])->name('favorites.index');
+    Route::post('/favorites/add', [FavoriteFoodController::class, 'store'])->name('favorites.store');
     Route::delete('/favorites/{id}', [FavoriteFoodController::class, 'destroy'])->name('favorites.destroy');
 });
 

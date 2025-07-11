@@ -2,9 +2,35 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
         <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+        <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title inertia>{{ config('app.name', 'Laravel') }}</title>
+        <title inertia>{{ config('app.name', 'KaloriKu') }}</title>
+
+        <!-- SEO Meta Tags -->
+        <meta name="description" content="KaloriKu - Aplikasi tracking kalori harian yang mudah dan praktis. Pantau asupan kalori, kelola makanan favorit, dan capai target kesehatan Anda.">
+        <meta name="keywords" content="kalori, tracking kalori, diet sehat, nutrisi, makanan, kesehatan">
+        <meta name="author" content="KaloriKu Team">
+
+        <!-- PWA Meta Tags -->
+        <meta name="theme-color" content="#f97316">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="default">
+        <meta name="apple-mobile-web-app-title" content="KaloriKu">
+
+        <!-- Open Graph Meta Tags -->
+        <meta property="og:title" content="KaloriKu - Tracking Kalori Harian">
+        <meta property="og:description" content="Aplikasi tracking kalori yang mudah dan praktis untuk hidup sehat">
+        <meta property="og:type" content="website">
+        <meta property="og:url" content="{{ url('/') }}">
+        <meta property="og:image" content="{{ url('/favicon.ico') }}">
+
+        <!-- Twitter Card Meta Tags -->
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:title" content="KaloriKu - Tracking Kalori Harian">
+        <meta name="twitter:description" content="Aplikasi tracking kalori yang mudah dan praktis untuk hidup sehat">
+        <meta name="twitter:image" content="{{ url('/favicon.ico') }}">
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">

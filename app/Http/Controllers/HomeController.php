@@ -29,9 +29,14 @@ class HomeController extends Controller
         // Get today's consumed calories
         $todayCalories = CalorieEntry::where('user_id', $user->id)
             ->whereDate('entry_date', $today)
-            ->sum('calorie_amount');
+            ->sum('calories');
 
-        // Get today's food entries
+        // Calculate percentage and status
+        $caloriePercentage = $calorieTarget > 0 ? round(($todayCalories / $calorieTarget) * 100, 1) : 0;
+        $remainingCalories = max(0, $calorieTarget - $todayCalories);
+        $isOverTarget = $caloriePercentage > 100;
+
+        // Get today's food entries grouped by meal type
         $todayFoods = CalorieEntry::with('food')
             ->where('user_id', $user->id)
             ->whereDate('entry_date', $today)
@@ -40,13 +45,66 @@ class HomeController extends Controller
             ->map(function ($entry) {
                 return [
                     'id' => $entry->id,
-                    'name' => $entry->food->name,
-                    'calories' => $entry->calorie_amount,
-                    'portion' => $entry->portion,
-                    'image' => null, // No image in basic structure
+                    'name' => $entry->food_display_name, // Use accessor from model
+                    'calories' => $entry->calories,
+                    'notes' => $entry->notes,
                     'time' => $entry->created_at->format('H:i'),
+                    'meal_type' => $entry->meal_type,
                 ];
             });
+
+        // Calculate calories by meal type
+        $mealCalories = [
+            'breakfast' => CalorieEntry::where('user_id', $user->id)
+                ->whereDate('entry_date', $today)
+                ->where('meal_type', 'breakfast')
+                ->sum('calories'),
+            'lunch' => CalorieEntry::where('user_id', $user->id)
+                ->whereDate('entry_date', $today)
+                ->where('meal_type', 'lunch')
+                ->sum('calories'),
+            'dinner' => CalorieEntry::where('user_id', $user->id)
+                ->whereDate('entry_date', $today)
+                ->where('meal_type', 'dinner')
+                ->sum('calories'),
+            'snack' => CalorieEntry::where('user_id', $user->id)
+                ->whereDate('entry_date', $today)
+                ->where('meal_type', 'snack')
+                ->sum('calories'),
+        ];
+
+        // Get user's favorite foods for quick add
+        $favoriteFoods = UserFavoriteFood::with('food:id,name,calories_per_100g,brand')
+            ->where('user_id', $user->id)
+            ->limit(6)
+            ->get()
+            ->map(function ($favorite) {
+                return [
+                    'id' => $favorite->food->id,
+                    'name' => $favorite->food->name,
+                    'calories_per_100g' => $favorite->food->calories_per_100g,
+                    'brand' => $favorite->food->brand,
+                ];
+            });
+
+        // Get weekly streak
+        $weeklyStreak = $this->calculateWeeklyStreak($user->id);
+
+        // Get last 7 days for mini chart
+        $weeklyData = $this->getWeeklyMiniData($user->id, $calorieTarget);
+
+        // Check if user needs calorie warning
+        $showCalorieWarning = false;
+        $warningMessage = '';
+
+        if ($isOverTarget) {
+            $showCalorieWarning = true;
+            $warningMessage = "Kamu sudah melebihi target kalori harian sebesar " .
+                number_format($todayCalories - $calorieTarget) . " kalori.";
+        } elseif ($caloriePercentage >= 90) {
+            $showCalorieWarning = true;
+            $warningMessage = "Kamu sudah mencapai {$caloriePercentage}% dari target kalori harian.";
+        }
 
         return Inertia::render('Home/HomePage', [
             'user' => [
@@ -56,10 +114,71 @@ class HomeController extends Controller
             'calories' => [
                 'consumed' => $todayCalories,
                 'target' => $calorieTarget,
-                'percentage' => $calorieTarget > 0 ? round(($todayCalories / $calorieTarget) * 100, 1) : 0,
+                'percentage' => $caloriePercentage,
+                'remaining' => $remainingCalories,
+                'is_over_target' => $isOverTarget,
             ],
+            'mealCalories' => $mealCalories,
             'todayFoods' => $todayFoods,
+            'favoriteFoods' => $favoriteFoods,
+            'weeklyStreak' => $weeklyStreak,
+            'weeklyData' => $weeklyData,
+            'userProfile' => $userProfile,
+            'showCalorieWarning' => $showCalorieWarning,
+            'warningMessage' => $warningMessage,
         ]);
+    }
+
+    /**
+     * Calculate weekly streak.
+     */
+    private function calculateWeeklyStreak($userId): int
+    {
+        $streak = 0;
+        $date = Carbon::today();
+
+        // Check backwards from today
+        for ($i = 0; $i < 30; $i++) { // Check up to 30 days
+            $hasEntry = CalorieEntry::where('user_id', $userId)
+                ->whereDate('entry_date', $date)
+                ->exists();
+
+            if ($hasEntry) {
+                $streak++;
+                $date->subDay();
+            } else {
+                break;
+            }
+        }
+
+        return $streak;
+    }
+
+    /**
+     * Get mini weekly data for chart.
+     */
+    private function getWeeklyMiniData($userId, $calorieTarget): array
+    {
+        $weekData = [];
+
+        for ($i = 6; $i >= 0; $i--) {
+            $date = Carbon::today()->subDays($i);
+            $calories = CalorieEntry::where('user_id', $userId)
+                ->whereDate('entry_date', $date)
+                ->sum('calories');
+
+            $percentage = $calorieTarget > 0 ? ($calories / $calorieTarget) * 100 : 0;
+
+            $weekData[] = [
+                'date' => $date->toDateString(),
+                'day' => $date->format('D'),
+                'calories' => (float) $calories,
+                'percentage' => round($percentage, 1),
+                'is_today' => $date->isToday(),
+            ];
+        }
+
+        return $weekData;
     }
 
     /**

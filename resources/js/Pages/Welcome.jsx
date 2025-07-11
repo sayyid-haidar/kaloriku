@@ -7,7 +7,13 @@ export default function Welcome({ auth }) {
             <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-blue-50">
                 {/* Navigation */}
                 <nav className="relative z-10 flex items-center justify-between px-6 py-4 lg:px-8">
-                    <div className="flex items-center">
+                    <div className="flex items-center space-x-3">
+                        {/* App Logo/Icon */}
+                        <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center shadow-lg">
+                            <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 2L13.09 8.26L21 9L13.09 9.74L12 16L10.91 9.74L3 9L10.91 8.26L12 2ZM12 11C13.1 11 14 10.1 14 9S13.1 7 12 7 10 7.9 10 9 10.9 11 12 11ZM12 13C9.79 13 8 14.79 8 17S9.79 21 12 21 16 19.21 16 17 14.21 13 12 13ZM12 15C13.1 15 14 15.9 14 17S13.1 19 12 19 10 18.1 10 17 10.9 15 12 15Z"/>
+                            </svg>
+                        </div>
                         <span className="text-2xl font-bold text-green-600">KaloriKu</span>
                     </div>
                     <div className="flex items-center space-x-4">
@@ -115,43 +121,138 @@ export default function Welcome({ auth }) {
 
                             {/* Right Content - Hero Image */}
                             <div className="relative">
-                                <div className="relative mx-auto w-80 h-96 lg:w-96 lg:h-[500px]">
+                                <div className="relative mx-auto w-72 h-[580px] lg:w-80 lg:h-[640px]">
                                     {/* Phone Mockup */}
-                                    <div className="absolute inset-0 bg-gradient-to-br from-gray-900 to-gray-700 rounded-[2.5rem] shadow-2xl">
-                                        <div className="absolute top-6 left-1/2 transform -translate-x-1/2 w-16 h-1 bg-gray-600 rounded-full"></div>
-                                        <div className="p-6 pt-12 h-full">
-                                            {/* Mockup Screen Content */}
-                                            <div className="bg-white rounded-2xl h-full p-6 flex flex-col">
-                                                <div className="text-center mb-6">
-                                                    <h3 className="text-xl font-bold text-gray-800">Target Harian</h3>
-                                                    <div className="text-3xl font-bold text-green-600 mt-2">2,150 kkal</div>
+                                    <div className="absolute inset-0 bg-gradient-to-br from-gray-900 to-gray-700 rounded-[3rem] shadow-2xl p-2">
+                                        {/* Phone Screen Bezel */}
+                                        <div className="w-full h-full bg-black rounded-[2.5rem] p-1">
+                                            {/* Notch */}
+                                            <div className="absolute top-2 left-1/2 transform -translate-x-1/2 w-20 h-6 bg-black rounded-full z-10"></div>
+
+                                            {/* Screen Content */}
+                                            <div className="w-full h-full bg-white rounded-[2.2rem] overflow-hidden relative">
+                                                {/* Status Bar */}
+                                                <div className="bg-gradient-to-r from-orange-400 to-red-500 h-12 flex items-center justify-between px-6 pt-2">
+                                                    <div className="text-white text-xs font-medium">9:41</div>
+                                                    <div className="flex items-center space-x-1">
+                                                        <div className="w-4 h-2 bg-white rounded-sm opacity-80"></div>
+                                                        <div className="w-1 h-3 bg-white rounded-sm opacity-60"></div>
+                                                    </div>
                                                 </div>
 
-                                                {/* Progress Circle */}
-                                                <div className="flex-1 flex items-center justify-center">
-                                                    <div className="relative w-40 h-40">
-                                                        <svg className="w-40 h-40 transform -rotate-90" viewBox="0 0 144 144">
-                                                            <circle cx="72" cy="72" r="64" fill="none" stroke="#e5e7eb" strokeWidth="8"/>
-                                                            <circle cx="72" cy="72" r="64" fill="none" stroke="#16a34a" strokeWidth="8" strokeDasharray="402" strokeDashoffset="120"/>
-                                                        </svg>
-                                                        <div className="absolute inset-0 flex items-center justify-center">
-                                                            <div className="text-center">
-                                                                <div className="text-2xl font-bold text-gray-800">1,580</div>
-                                                                <div className="text-sm text-gray-500">tersisa</div>
+                                                {/* App Content */}
+                                                <div className="flex-1 bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800 px-4 py-4">
+                                                    {/* Header */}
+                                                    <div className="text-white mb-4">
+                                                        <h3 className="text-lg font-bold">Selamat Siang!</h3>
+                                                        <p className="text-blue-100 text-sm">Haidar</p>
+                                                    </div>
+
+                                                    {/* Calorie Progress Card */}
+                                                    <div className="bg-white/10 backdrop-blur rounded-xl p-4 mb-4">
+                                                        <div className="text-white text-center">
+                                                            <p className="text-xs text-blue-100 mb-1">Kalori Hari Ini</p>
+                                                            <p className="text-2xl font-bold">1,420</p>
+                                                            <p className="text-xs text-blue-200">dari 2,000 target</p>
+
+                                                            {/* Progress Bar */}
+                                                            <div className="bg-white/20 rounded-full h-2 mt-3 overflow-hidden">
+                                                                <div className="bg-green-400 h-full rounded-full" style={{width: '71%'}}></div>
                                                             </div>
+                                                            <p className="text-xs text-blue-200 mt-1">71% • Sisa 580 kal</p>
                                                         </div>
                                                     </div>
                                                 </div>
 
-                                                {/* Quick Actions */}
-                                                <div className="space-y-3 mt-6">
-                                                    <div className="bg-green-50 p-3 rounded-lg flex justify-between items-center">
-                                                        <span className="text-gray-700">Nasi Goreng</span>
-                                                        <span className="font-medium text-green-600">450 kkal</span>
+                                                {/* Content Area */}
+                                                <div className="flex-1 bg-gray-50 px-4 py-3 space-y-3">
+                                                    {/* Recent Foods */}
+                                                    <div className="bg-white rounded-lg p-3 shadow-sm">
+                                                        <div className="text-xs font-medium text-gray-700 mb-2">Makanan Hari Ini</div>
+
+                                                        <div className="space-y-2">
+                                                            <div className="flex justify-between items-center">
+                                                                <div className="flex items-center space-x-2">
+                                                                    <span className="text-sm">🌅</span>
+                                                                    <div>
+                                                                        <div className="text-xs font-medium">Nasi Uduk</div>
+                                                                        <div className="text-xs text-gray-500">08:30</div>
+                                                                    </div>
+                                                                </div>
+                                                                <div className="text-xs font-bold text-orange-600">350 kal</div>
+                                                            </div>
+
+                                                            <div className="flex justify-between items-center">
+                                                                <div className="flex items-center space-x-2">
+                                                                    <span className="text-sm">☀️</span>
+                                                                    <div>
+                                                                        <div className="text-xs font-medium">Ayam Geprek</div>
+                                                                        <div className="text-xs text-gray-500">12:15</div>
+                                                                    </div>
+                                                                </div>
+                                                                <div className="text-xs font-bold text-orange-600">520 kal</div>
+                                                            </div>
+
+                                                            <div className="flex justify-between items-center">
+                                                                <div className="flex items-center space-x-2">
+                                                                    <span className="text-sm">🍪</span>
+                                                                    <div>
+                                                                        <div className="text-xs font-medium">Kopi & Biskuit</div>
+                                                                        <div className="text-xs text-gray-500">15:30</div>
+                                                                    </div>
+                                                                </div>
+                                                                <div className="text-xs font-bold text-orange-600">180 kal</div>
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                    <div className="bg-blue-50 p-3 rounded-lg flex justify-between items-center">
-                                                        <span className="text-gray-700">Ayam Bakar</span>
-                                                        <span className="font-medium text-blue-600">320 kkal</span>
+
+                                                    {/* Weekly Progress */}
+                                                    <div className="bg-white rounded-lg p-3 shadow-sm">
+                                                        <div className="text-xs font-medium text-gray-700 mb-2">Progress 7 Hari</div>
+                                                        <div className="flex justify-between items-end h-8 space-x-1">
+                                                            {[40, 65, 80, 90, 75, 71, 45].map((height, i) => (
+                                                                <div
+                                                                    key={i}
+                                                                    className={`flex-1 rounded-t transition-all ${
+                                                                        i === 5 ? 'bg-blue-500' :
+                                                                        height >= 70 ? 'bg-green-400' :
+                                                                        height >= 40 ? 'bg-yellow-400' : 'bg-gray-300'
+                                                                    }`}
+                                                                    style={{height: `${height}%`, minHeight: '4px'}}
+                                                                />
+                                                            ))}
+                                                        </div>
+                                                        <div className="flex justify-between text-xs text-gray-500 mt-1">
+                                                            {['S', 'S', 'R', 'K', 'J', 'S', 'M'].map((day, i) => (
+                                                                <div key={i} className={i === 5 ? 'text-blue-600 font-medium' : ''}>{day}</div>
+                                                            ))}
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                {/* Bottom Navigation */}
+                                                <div className="bg-white border-t border-gray-100 px-2 py-3">
+                                                    <div className="flex justify-around items-center">
+                                                        <div className="flex flex-col items-center">
+                                                            <div className="w-6 h-6 bg-orange-500 rounded flex items-center justify-center text-white text-xs">🏠</div>
+                                                            <div className="text-xs text-orange-500 font-medium mt-1">Beranda</div>
+                                                        </div>
+                                                        <div className="flex flex-col items-center">
+                                                            <div className="w-6 h-6 bg-gray-300 rounded flex items-center justify-center text-gray-600 text-xs">📊</div>
+                                                            <div className="text-xs text-gray-400 mt-1">Statistik</div>
+                                                        </div>
+                                                        <div className="flex flex-col items-center">
+                                                            <div className="w-8 h-8 bg-gradient-to-r from-orange-400 to-red-500 rounded-full flex items-center justify-center text-white text-sm font-bold">+</div>
+                                                            <div className="text-xs text-orange-500 font-medium mt-1">Tambah</div>
+                                                        </div>
+                                                        <div className="flex flex-col items-center">
+                                                            <div className="w-6 h-6 bg-gray-300 rounded flex items-center justify-center text-gray-600 text-xs">❤️</div>
+                                                            <div className="text-xs text-gray-400 mt-1">Favorit</div>
+                                                        </div>
+                                                        <div className="flex flex-col items-center">
+                                                            <div className="w-6 h-6 bg-gray-300 rounded flex items-center justify-center text-gray-600 text-xs">👤</div>
+                                                            <div className="text-xs text-gray-400 mt-1">Profil</div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -159,13 +260,13 @@ export default function Welcome({ auth }) {
                                     </div>
 
                                     {/* Floating Elements */}
-                                    <div className="absolute -top-4 -right-4 bg-white rounded-xl shadow-lg p-3">
+                                    <div className="absolute -top-4 -right-4 bg-white rounded-xl shadow-xl p-3 animate-bounce">
                                         <div className="text-2xl">🎯</div>
                                     </div>
-                                    <div className="absolute top-20 -left-6 bg-white rounded-xl shadow-lg p-3">
+                                    <div className="absolute top-32 -left-6 bg-white rounded-xl shadow-xl p-3 animate-pulse">
                                         <div className="text-2xl">💪</div>
                                     </div>
-                                    <div className="absolute bottom-10 -right-6 bg-white rounded-xl shadow-lg p-3">
+                                    <div className="absolute bottom-20 -right-6 bg-white rounded-xl shadow-xl p-3 animate-bounce delay-500">
                                         <div className="text-2xl">📱</div>
                                     </div>
                                 </div>

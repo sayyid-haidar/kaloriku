@@ -70,6 +70,12 @@
     - [Business Inquiries](#business-inquiries)
     - [Community](#community)
   - [🙏 Special Thanks](#-special-thanks)
+  - [📱 Cara Menggunakan Aplikasi](#-cara-menggunakan-aplikasi)
+    - [🔐 Login & Registrasi](#-login--registrasi)
+    - [📊 Onboarding & Profil](#-onboarding--profil)
+    - [🍽️ Pencatatan Kalori](#️-pencatatan-kalori)
+    - [⭐ Makanan Favorit](#-makanan-favorit)
+    - [📈 Riwayat & Dashboard](#-riwayat--dashboard)
 
 ---
 
@@ -546,3 +552,132 @@ Terima kasih kepada:
 [Website](https://kaloriku.com) • [GitHub](https://github.com/username/kaloriku) • [Documentation](./DOCKER.md)
 
 </div>
+
+---
+
+## 📱 Cara Menggunakan Aplikasi
+
+### 🔐 Login & Registrasi
+
+1. **Registrasi Akun Baru**
+   - Kunjungi halaman utama aplikasi
+   - Klik tombol "Register" 
+   - Isi data: nama, email, dan password
+   - Verifikasi email Anda
+
+2. **Login**
+   - Masukkan email dan password yang sudah terdaftar
+   - Atau gunakan akun demo:
+     - Email: `test@example.com`
+     - Password: `password`
+
+### 📊 Onboarding & Profil
+
+Setelah login pertama kali, Anda akan diarahkan ke proses onboarding:
+
+1. **Data Profil**
+   - Masukkan tinggi badan (cm)
+   - Masukkan berat badan (kg)
+   - Pilih jenis kelamin
+   - Masukkan tanggal lahir
+
+2. **Tingkat Aktivitas**
+   - Pilih tingkat aktivitas harian Anda:
+     - Sedentary (jarang bergerak)
+     - Lightly Active (olahraga ringan 1-3 hari/minggu)
+     - Moderately Active (olahraga sedang 3-5 hari/minggu)
+     - Very Active (olahraga berat 6-7 hari/minggu)
+     - Extremely Active (olahraga sangat berat 2x sehari)
+
+3. **Target Kalori**
+   - Sistem akan menghitung kebutuhan kalori harian Anda secara otomatis
+   - Hasil perhitungan berdasarkan formula Harris-Benedict
+
+### 🍽️ Pencatatan Kalori
+
+#### Menambah Makanan ke Diary
+
+1. **Akses Halaman Tambah Makanan**
+   - Dari dashboard, klik tombol "+" atau "Tambah Makanan"
+   - Atau kunjungi `/add-food`
+
+2. **Pilih Makanan**
+   - **Tab "Baru"**: Cari makanan dari database lengkap
+     - Gunakan kolom pencarian untuk menemukan makanan
+     - Database berisi makanan Indonesia populer
+   - **Tab "Favorit"**: Pilih dari makanan favorit Anda
+
+3. **Tentukan Porsi**
+   - Masukkan berat makanan dalam gram
+   - Sistem akan menghitung kalori secara otomatis
+   - Formula: `(kalori_per_100g × porsi_gram) ÷ 100`
+   - Contoh: Nasi 150g = (150 kalori × 150g) ÷ 100 = 225 kalori
+
+4. **Tanggal (Opsional)**
+   - Secara default, sistem menggunakan tanggal hari ini
+   - Anda bisa mengubah tanggal untuk mencatat makanan di hari lain
+   - Rentang: maksimal 1 tahun ke belakang, tidak boleh masa depan
+
+5. **Simpan Entry**
+   - Klik "Tambah ke Diary"
+   - Sistem akan menyimpan dan mengarahkan ke dashboard
+
+#### Validasi & Error Handling
+
+- **Porsi**: minimum 0.1g, maksimum 9999.99g
+- **Makanan**: harus dipilih dari database yang tersedia
+- **Tanggal**: tidak boleh masa depan atau lebih dari 1 tahun lalu
+- Error ditampilkan dengan pesan yang jelas dalam bahasa Indonesia
+
+### ⭐ Makanan Favorit
+
+#### Menambah ke Favorit
+- Saat memilih makanan, klik ikon hati di sebelah nama makanan
+- Atau centang checkbox "Tandai sebagai favorit"
+- Makanan akan tersimpan di tab "Favorit" untuk akses cepat
+
+#### Menghapus dari Favorit
+- Di tab "Favorit", klik makanan yang ingin dihapus dari favorit
+- Klik ikon hati yang sudah berwarna merah
+- Atau buka halaman Favorit dan hapus dari sana
+
+#### Keunggulan Favorit
+- Akses cepat ke makanan yang sering dikonsumsi
+- Tidak perlu mencari berulang kali
+- Meningkatkan efisiensi pencatatan
+
+### 📈 Riwayat & Dashboard
+
+#### Dashboard Utama
+- Menampilkan ringkasan kalori hari ini
+- Progress bar menunjukkan pencapaian vs target
+- Riwayat entry terakhir
+- Tombol cepat untuk tambah makanan
+
+#### Halaman Riwayat
+- Daftar semua entry kalori yang pernah dicatat
+- Filter berdasarkan tanggal
+- Detail makanan dan porsi
+- Total kalori per hari
+
+#### Tips Penggunaan Efektif
+
+1. **Konsistensi**: Catat setiap makanan yang dikonsumsi
+2. **Akurasi**: Timbang makanan untuk porsi yang tepat
+3. **Real-time**: Catat segera setelah makan
+4. **Favorit**: Manfaatkan fitur favorit untuk makanan rutin
+5. **Review**: Cek dashboard secara berkala untuk tracking progress
+
+#### Troubleshooting
+
+**Problem**: Tidak bisa mencatat kalori
+- **Solusi**: Pastikan Anda sudah login dan memilih makanan
+- **Cek**: Porsi harus diisi dengan angka valid (0.1-9999.99)
+
+**Problem**: Makanan tidak ditemukan
+- **Solusi**: Coba kata kunci yang berbeda atau lebih spesifik
+- **Alternative**: Pilih makanan serupa dari database
+
+**Problem**: Kalori tidak sesuai ekspektasi  
+- **Solusi**: Database menggunakan kalori per 100g, pastikan porsi sudah benar
+- **Contoh**: 50g nasi = 75 kalori (bukan 150 kalori)

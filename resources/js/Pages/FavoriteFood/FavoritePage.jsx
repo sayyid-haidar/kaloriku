@@ -1,11 +1,47 @@
 import { Head, router } from '@inertiajs/react';
+import { useState } from 'react';
 import MobileLayout from '@/Layouts/MobileLayout';
-import { ChevronLeftIcon, PencilIcon } from '@heroicons/react/24/outline';
+import {
+    ArrowLeftIcon,
+    HeartIcon,
+    PlusIcon,
+    MagnifyingGlassIcon,
+    TrashIcon
+} from '@heroicons/react/24/outline';
+import { HeartIcon as HeartSolid } from '@heroicons/react/24/solid';
 
 export default function FavoriteFood({ favoriteFoods }) {
-    const handleEdit = (foodId) => {
-        // Navigate to add food page with this food pre-selected
-        router.get(route('calorie.create'), { food_id: foodId });
+    const [searchTerm, setSearchTerm] = useState('');
+
+    const filteredFoods = favoriteFoods.filter(food =>
+        food.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+    const handleQuickAdd = (food) => {
+        const estimatedCalories = food.calories_per_100g || food.calories || 100;
+
+        router.post(route('calorie.quick-add'), {
+            food_name: food.name,
+            calories: estimatedCalories,
+            notes: `Quick add dari favorit`,
+            meal_type: getCurrentMealType()
+        }, {
+            onSuccess: () => {
+                // Show success message or redirect
+                router.visit('/home');
+            },
+            onError: (errors) => {
+                console.error('Quick add failed:', errors);
+            }
+        });
+    };
+
+    const getCurrentMealType = () => {
+        const hour = new Date().getHours();
+        if (hour >= 5 && hour < 11) return 'breakfast';
+        if (hour >= 11 && hour < 15) return 'lunch';
+        if (hour >= 15 && hour < 20) return 'dinner';
+        return 'snack';
     };
 
     const handleRemove = (foodId) => {
@@ -14,90 +50,134 @@ export default function FavoriteFood({ favoriteFoods }) {
         }
     };
 
-    return (
-        <MobileLayout showAddButton={false}>
-            <Head title="Makanan Favorit" />
+    const formatNumber = (num) => {
+        return new Intl.NumberFormat('id-ID').format(num);
+    };
 
-            <div className="px-6 py-6">
-                {/* Header */}
-                <div className="flex items-center mb-6">
+    return (
+        <MobileLayout>
+            <Head title="Makanan Favorit - kaloriKu" />
+
+            {/* Header */}
+            <div className="bg-gradient-to-br from-pink-500 via-red-500 to-pink-600 text-white p-6 rounded-b-3xl shadow-lg">
+                <div className="flex items-center space-x-3 mb-6">
                     <button
-                        onClick={() => window.history.back()}
-                        className="p-2 text-gray-600 hover:text-gray-900 mr-3"
+                        className="p-2 hover:bg-white/10 rounded-xl transition-colors"
+                        onClick={() => router.visit('/home')}
                     >
-                        <ChevronLeftIcon className="h-6 w-6" />
+                        <ArrowLeftIcon className="w-6 h-6" />
                     </button>
-                    <h1 className="text-2xl font-bold text-gray-900">Makanan Favorit</h1>
+                    <div className="flex-1">
+                        <h1 className="text-2xl font-bold">Makanan Favorit</h1>
+                        <p className="text-pink-100 text-sm">{favoriteFoods.length} makanan tersimpan</p>
+                    </div>
+                    <div className="text-right">
+                        <HeartSolid className="w-8 h-8 mx-auto mb-1 text-pink-200" />
+                        <p className="text-xs">Favorit</p>
+                    </div>
                 </div>
 
-                {/* Favorite Foods List */}
+                {/* Search Bar */}
+                {favoriteFoods.length > 0 && (
+                    <div className="relative">
+                        <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-pink-200" />
+                        <input
+                            type="text"
+                            placeholder="Cari makanan favorit..."
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            className="w-full pl-10 pr-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-pink-200 focus:outline-none focus:bg-white/20"
+                        />
+                    </div>
+                )}
+            </div>
+
+            {/* Content */}
+            <div className="px-6 py-6">
+                {/* Empty State */}
                 {favoriteFoods.length === 0 ? (
                     <div className="text-center py-12">
-                        <div className="mb-4">
-                            <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                            </svg>
+                        <div className="w-20 h-20 bg-pink-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <HeartIcon className="w-10 h-10 text-pink-400" />
                         </div>
-                        <h3 className="text-lg font-medium text-gray-900 mb-2">Belum ada makanan favorit</h3>
-                        <p className="text-gray-500 mb-6">Tambahkan makanan ke favorit saat menambah kalori</p>
+                        <h3 className="text-xl font-bold text-gray-900 mb-2">Belum ada makanan favorit</h3>
+                        <p className="text-gray-600 mb-6 max-w-sm mx-auto">
+                            Tambahkan makanan ke favorit saat menambah kalori untuk akses cepat
+                        </p>
+                        <button
+                            onClick={() => router.visit('/add-food')}
+                            className="bg-pink-500 hover:bg-pink-600 text-white px-6 py-3 rounded-xl font-medium transition-colors inline-flex items-center space-x-2"
+                        >
+                            <PlusIcon className="w-5 h-5" />
+                            <span>Tambah Makanan</span>
+                        </button>
                     </div>
                 ) : (
-                    <div className="space-y-3">
-                        {favoriteFoods.map((food) => (
-                            <div key={food.id} className="flex items-center justify-between p-4 bg-white rounded-lg shadow-sm">
-                                <div className="flex items-center space-x-4 flex-1">
-                                    <div className="w-12 h-12 bg-gray-200 rounded-lg flex items-center justify-center overflow-hidden">
-                                        {food.image ? (
-                                            <img
-                                                src={food.image}
-                                                alt={food.name}
-                                                className="w-full h-full object-cover"
-                                            />
-                                        ) : (
-                                            <div className="w-full h-full bg-gradient-to-br from-blue-400 to-blue-600 rounded-lg flex items-center justify-center">
-                                                <span className="text-white font-bold text-xs">
+                    <>
+                        {/* Results count */}
+                        {searchTerm && (
+                            <div className="mb-4">
+                                <p className="text-sm text-gray-600">
+                                    {filteredFoods.length} dari {favoriteFoods.length} makanan
+                                </p>
+                            </div>
+                        )}
+
+                        {/* Favorite Foods List */}
+                        <div className="space-y-3">
+                            {filteredFoods.map((food) => (
+                                <div key={food.id} className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+                                    <div className="flex items-center justify-between">
+                                        <div className="flex items-center space-x-4 flex-1">
+                                            <div className="w-12 h-12 bg-gradient-to-br from-pink-400 to-red-500 rounded-xl flex items-center justify-center">
+                                                <span className="text-white font-bold text-lg">
                                                     {food.name.charAt(0).toUpperCase()}
                                                 </span>
                                             </div>
-                                        )}
-                                    </div>
-                                    <div className="flex-1">
-                                        <h4 className="font-semibold text-gray-900">{food.name}</h4>
-                                        <p className="text-sm text-blue-600 font-medium">{food.calories} kalori</p>
+                                            <div className="flex-1">
+                                                <h4 className="font-semibold text-gray-900">{food.name}</h4>
+                                                <div className="flex items-center space-x-2 text-sm text-gray-600">
+                                                    <span>{formatNumber(food.calories_per_100g || food.calories || 0)} kal</span>
+                                                    {food.brand && (
+                                                        <>
+                                                            <span>•</span>
+                                                            <span>{food.brand}</span>
+                                                        </>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className="flex items-center space-x-2">
+                                            <button
+                                                onClick={() => handleQuickAdd(food)}
+                                                className="bg-green-500 hover:bg-green-600 text-white p-2 rounded-lg transition-colors"
+                                                title="Quick Add"
+                                            >
+                                                <PlusIcon className="w-5 h-5" />
+                                            </button>
+                                            <button
+                                                onClick={() => handleRemove(food.id)}
+                                                className="bg-red-500 hover:bg-red-600 text-white p-2 rounded-lg transition-colors"
+                                                title="Hapus dari favorit"
+                                            >
+                                                <TrashIcon className="w-5 h-5" />
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
-                                <button
-                                    onClick={() => handleEdit(food.id)}
-                                    className="p-2 text-gray-400 hover:text-blue-600 transition-colors"
-                                >
-                                    <PencilIcon className="h-5 w-5" />
-                                </button>
-                            </div>
-                        ))}
-                    </div>
-                )}
+                            ))}
+                        </div>
 
-                {/* Bottom Tabs Navigation - handled by MobileLayout */}
-                <div className="mt-8 flex justify-center">
-                    <div className="flex space-x-8">
-                        <button className="flex flex-col items-center space-y-1 text-gray-400">
-                            <div className="w-8 h-8 rounded-full bg-gray-200"></div>
-                            <span className="text-xs">Beranda</span>
-                        </button>
-                        <button className="flex flex-col items-center space-y-1 text-blue-600">
-                            <div className="w-8 h-8 rounded-full bg-blue-600"></div>
-                            <span className="text-xs font-medium">Makanan</span>
-                        </button>
-                        <button className="flex flex-col items-center space-y-1 text-gray-400">
-                            <div className="w-8 h-8 rounded-full bg-gray-200"></div>
-                            <span className="text-xs">Laporan</span>
-                        </button>
-                        <button className="flex flex-col items-center space-y-1 text-gray-400">
-                            <div className="w-8 h-8 rounded-full bg-gray-200"></div>
-                            <span className="text-xs">Profil</span>
-                        </button>
-                    </div>
-                </div>
+                        {/* No results */}
+                        {searchTerm && filteredFoods.length === 0 && (
+                            <div className="text-center py-8">
+                                <MagnifyingGlassIcon className="w-12 h-12 text-gray-400 mx-auto mb-3" />
+                                <p className="text-gray-500">Tidak ada makanan yang cocok dengan "{searchTerm}"</p>
+                            </div>
+                        )}
+                    </>
+                )}
             </div>
         </MobileLayout>
     );
