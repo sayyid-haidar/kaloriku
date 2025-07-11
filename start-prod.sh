@@ -83,7 +83,33 @@ if ! grep -q "^APP_KEY=base64:" .env.docker; then
     fi
 fi
 
-# Copy production environment file
+# Enable Telescope if monitoring is enabled
+if [ "$ENABLE_MONITORING" = true ]; then
+    echo "🔭 Enabling Telescope in .env.docker..."
+    if grep -q "^TELESCOPE_ENABLED=" .env.docker; then
+        if [[ "$OSTYPE" == "darwin"* ]]; then
+            sed -i '' "s/^TELESCOPE_ENABLED=.*/TELESCOPE_ENABLED=true/" .env.docker
+        else
+            sed -i "s/^TELESCOPE_ENABLED=.*/TELESCOPE_ENABLED=true/" .env.docker
+        fi
+    else
+        echo "TELESCOPE_ENABLED=true" >> .env.docker
+    fi
+else
+    echo "🔭 Disabling Telescope in .env.docker..."
+    if grep -q "^TELESCOPE_ENABLED=" .env.docker; then
+        if [[ "$OSTYPE" == "darwin"* ]]; then
+            sed -i '' "s/^TELESCOPE_ENABLED=.*/TELESCOPE_ENABLED=false/" .env.docker
+        else
+            sed -i "s/^TELESCOPE_ENABLED=.*/TELESCOPE_ENABLED=false/" .env.docker
+        fi
+    else
+        echo "TELESCOPE_ENABLED=false" >> .env.docker
+    fi
+fi
+
+# Copy production environment file for local reference (optional)
+cp .env.docker .env
 cp .env.docker .env
 
 # Clean up previous containers
@@ -144,10 +170,27 @@ if [ -z "$(grep "^APP_KEY=base64:" /var/www/.env)" ]; then
     php artisan key:generate --force
 fi
 
+# Ensure MySQL database configuration
+echo "DB_CONNECTION=mysql" >> /var/www/.env.tmp
+echo "DB_HOST=mysql" >> /var/www/.env.tmp
+echo "DB_PORT=3306" >> /var/www/.env.tmp
+echo "DB_DATABASE=kaloriku" >> /var/www/.env.tmp
+echo "DB_USERNAME=kaloriku" >> /var/www/.env.tmp
+echo "DB_PASSWORD=secret123" >> /var/www/.env.tmp
+
+# Remove old DB config and merge new one
+grep -v "^DB_" /var/www/.env > /var/www/.env.clean || true
+cat /var/www/.env.clean /var/www/.env.tmp > /var/www/.env
+rm -f /var/www/.env.tmp /var/www/.env.clean
+
 # Ensure Redis password is set
 if ! grep -q "^REDIS_PASSWORD=" /var/www/.env; then
     echo "REDIS_PASSWORD=redis123" >> /var/www/.env
 fi
+
+# Clear config cache to ensure new database settings are loaded
+echo "Clearing config cache to load new database settings..."
+php artisan config:clear
 '
 
 # Run migrations and seeders

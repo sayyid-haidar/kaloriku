@@ -13,18 +13,9 @@ services:
       - ./storage:/var/www/storage
       - ./bootstrap/cache:/var/www/bootstrap/cache
       - ./public/storage:/var/www/public/storage
-    environment:
-      - APP_ENV=production
-      - APP_DEBUG=false
-      - DB_HOST=mysql
-      - DB_DATABASE=kaloriku
-      - DB_USERNAME=kaloriku
-      - DB_PASSWORD=secret123
-      - REDIS_HOST=redis
-      - REDIS_PASSWORD=redis123
-      - CACHE_STORE=redis
-      - SESSION_DRIVER=redis
-      - QUEUE_CONNECTION=redis
+      - ./.env.docker:/var/www/.env
+    env_file:
+      - .env.docker
     depends_on:
       - mysql
       - redis
@@ -73,15 +64,9 @@ services:
     restart: unless-stopped
     volumes:
       - ./storage:/var/www/storage
-    environment:
-      - APP_ENV=production
-      - DB_HOST=mysql
-      - DB_DATABASE=kaloriku
-      - DB_USERNAME=kaloriku
-      - DB_PASSWORD=secret123
-      - REDIS_HOST=redis
-      - REDIS_PASSWORD=redis123
-      - QUEUE_CONNECTION=redis
+      - ./.env.docker:/var/www/.env
+    env_file:
+      - .env.docker
     depends_on:
       - mysql
       - redis
@@ -101,14 +86,9 @@ services:
     restart: unless-stopped
     volumes:
       - ./storage:/var/www/storage
-    environment:
-      - APP_ENV=production
-      - DB_HOST=mysql
-      - DB_DATABASE=kaloriku
-      - DB_USERNAME=kaloriku
-      - DB_PASSWORD=secret123
-      - REDIS_HOST=redis
-      - REDIS_PASSWORD=redis123
+      - ./.env.docker:/var/www/.env
+    env_file:
+      - .env.docker
     depends_on:
       - mysql
       - redis
@@ -187,18 +167,13 @@ services:
     volumes:
       - ./storage:/var/www/storage
       - ./bootstrap/cache:/var/www/bootstrap/cache
+      - ./.env.docker:/var/www/.env
+    env_file:
+      - .env.docker
     environment:
       - APP_ENV=local
       - APP_DEBUG=true
-      - DB_HOST=mysql
-      - DB_DATABASE=kaloriku
-      - DB_USERNAME=kaloriku
-      - DB_PASSWORD=secret123
-      - REDIS_HOST=redis
-      - REDIS_PASSWORD=redis123
       - TELESCOPE_ENABLED=true
-      - CACHE_STORE=redis
-      - SESSION_DRIVER=redis
       - APACHE_PORT=8080
     depends_on:
       - mysql
