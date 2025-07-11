@@ -7,13 +7,18 @@
 
         <title inertia>{{ config('app.name', 'KaloriKu') }}</title>
 
+        <!-- Custom Favicon -->
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico">
+        <link rel="apple-touch-icon" href="/favicon.ico">
+
         <!-- SEO Meta Tags -->
         <meta name="description" content="KaloriKu - Aplikasi tracking kalori harian yang mudah dan praktis. Pantau asupan kalori, kelola makanan favorit, dan capai target kesehatan Anda.">
         <meta name="keywords" content="kalori, tracking kalori, diet sehat, nutrisi, makanan, kesehatan">
         <meta name="author" content="KaloriKu Team">
 
         <!-- PWA Meta Tags -->
-        <meta name="theme-color" content="#f97316">
+        <meta name="theme-color" content="#22c55e">
         <meta name="mobile-web-app-capable" content="yes">
         <meta name="apple-mobile-web-app-capable" content="yes">
         <meta name="apple-mobile-web-app-status-bar-style" content="default">

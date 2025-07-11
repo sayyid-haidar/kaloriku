@@ -16,7 +16,7 @@ class FoodSeeder extends Seeder
             // Indonesian Foods
             [
                 'name' => 'Nasi Putih',
-                'calories_per_100g' => 130,
+                'calories' => 130,
                 'description' => 'Nasi putih biasa',
                 'is_verified' => true,
                 'tags' => ['nasi', 'karbohidrat', 'pokok'],
@@ -24,7 +24,7 @@ class FoodSeeder extends Seeder
             ],
             [
                 'name' => 'Nasi Goreng',
-                'calories_per_100g' => 163,
+                'calories' => 163,
                 'description' => 'Nasi goreng dengan telur dan sayuran',
                 'is_verified' => true,
                 'tags' => ['nasi', 'gorengan', 'lengkap'],
@@ -32,7 +32,7 @@ class FoodSeeder extends Seeder
             ],
             [
                 'name' => 'Ayam Bakar',
-                'calories_per_100g' => 189,
+                'calories' => 189,
                 'description' => 'Ayam bakar tanpa kulit',
                 'is_verified' => true,
                 'tags' => ['ayam', 'protein', 'bakar'],
@@ -40,7 +40,7 @@ class FoodSeeder extends Seeder
             ],
             [
                 'name' => 'Ayam Goreng',
-                'calories_per_100g' => 250,
+                'calories' => 250,
                 'description' => 'Ayam goreng dengan kulit',
                 'is_verified' => true,
                 'tags' => ['ayam', 'protein', 'gorengan'],
@@ -48,7 +48,7 @@ class FoodSeeder extends Seeder
             ],
             [
                 'name' => 'Sayur Lodeh',
-                'calories_per_100g' => 65,
+                'calories' => 65,
                 'description' => 'Sayur lodeh dengan santan',
                 'is_verified' => true,
                 'tags' => ['sayur', 'santan', 'tradisional'],
@@ -56,7 +56,7 @@ class FoodSeeder extends Seeder
             ],
             [
                 'name' => 'Sayur Sop',
-                'calories_per_100g' => 40,
+                'calories' => 40,
                 'description' => 'Sup sayuran segar',
                 'is_verified' => true,
                 'tags' => ['sayur', 'segar', 'kuah'],
@@ -64,7 +64,7 @@ class FoodSeeder extends Seeder
             ],
             [
                 'name' => 'Gado-Gado',
-                'calories_per_100g' => 150,
+                'calories' => 150,
                 'description' => 'Salad sayuran dengan bumbu kacang',
                 'is_verified' => true,
                 'tags' => ['sayur', 'kacang', 'salad'],
@@ -72,7 +72,7 @@ class FoodSeeder extends Seeder
             ],
             [
                 'name' => 'Soto Ayam',
-                'calories_per_100g' => 120,
+                'calories' => 120,
                 'description' => 'Soto ayam dengan kuah bening',
                 'is_verified' => true,
                 'tags' => ['soto', 'ayam', 'kuah'],
@@ -80,7 +80,7 @@ class FoodSeeder extends Seeder
             ],
             [
                 'name' => 'Rendang',
-                'calories_per_100g' => 220,
+                'calories' => 220,
                 'description' => 'Rendang daging sapi',
                 'is_verified' => true,
                 'tags' => ['daging', 'pedas', 'tradisional'],
@@ -88,7 +88,7 @@ class FoodSeeder extends Seeder
             ],
             [
                 'name' => 'Tempe Goreng',
-                'calories_per_100g' => 193,
+                'calories' => 193,
                 'description' => 'Tempe goreng crispy',
                 'is_verified' => true,
                 'tags' => ['tempe', 'protein', 'gorengan'],
@@ -96,7 +96,7 @@ class FoodSeeder extends Seeder
             ],
             [
                 'name' => 'Tahu Goreng',
-                'calories_per_100g' => 271,
+                'calories' => 271,
                 'description' => 'Tahu goreng renyah',
                 'is_verified' => true,
                 'tags' => ['tahu', 'protein', 'gorengan'],
@@ -104,7 +104,7 @@ class FoodSeeder extends Seeder
             ],
             [
                 'name' => 'Mie Ayam',
-                'calories_per_100g' => 110,
+                'calories' => 110,
                 'description' => 'Mie ayam dengan topping lengkap',
                 'is_verified' => true,
                 'tags' => ['mie', 'ayam', 'kuah'],
@@ -112,7 +112,7 @@ class FoodSeeder extends Seeder
             ],
             [
                 'name' => 'Bakso',
-                'calories_per_100g' => 85,
+                'calories' => 85,
                 'description' => 'Bakso sapi dengan kuah',
                 'is_verified' => true,
                 'tags' => ['bakso', 'daging', 'kuah'],
@@ -120,7 +120,7 @@ class FoodSeeder extends Seeder
             ],
             [
                 'name' => 'Es Teh Manis',
-                'calories_per_100g' => 35,
+                'calories' => 35,
                 'description' => 'Es teh manis segar',
                 'is_verified' => true,
                 'tags' => ['minuman', 'manis', 'es'],
@@ -128,7 +128,7 @@ class FoodSeeder extends Seeder
             ],
             [
                 'name' => 'Air Putih',
-                'calories_per_100g' => 0,
+                'calories' => 0,
                 'description' => 'Air putih tawar',
                 'is_verified' => true,
                 'tags' => ['minuman', 'sehat'],
@@ -136,7 +136,7 @@ class FoodSeeder extends Seeder
             ],
             [
                 'name' => 'Buah Apel',
-                'calories_per_100g' => 52,
+                'calories' => 52,
                 'description' => 'Apel segar tanpa kulit',
                 'is_verified' => true,
                 'tags' => ['buah', 'segar', 'vitamin'],
@@ -144,7 +144,7 @@ class FoodSeeder extends Seeder
             ],
             [
                 'name' => 'Pisang',
-                'calories_per_100g' => 89,
+                'calories' => 89,
                 'description' => 'Pisang matang segar',
                 'is_verified' => true,
                 'tags' => ['buah', 'manis', 'kalium'],
@@ -152,7 +152,7 @@ class FoodSeeder extends Seeder
             ],
             [
                 'name' => 'Jeruk',
-                'calories_per_100g' => 47,
+                'calories' => 47,
                 'description' => 'Jeruk segar vitamin C',
                 'is_verified' => true,
                 'tags' => ['buah', 'asam', 'vitamin-c'],
@@ -160,7 +160,7 @@ class FoodSeeder extends Seeder
             ],
             [
                 'name' => 'Nasi Gudeg',
-                'calories_per_100g' => 165,
+                'calories' => 165,
                 'description' => 'Nasi gudeg Yogyakarta',
                 'is_verified' => true,
                 'tags' => ['nasi', 'gudeg', 'tradisional'],
@@ -168,7 +168,7 @@ class FoodSeeder extends Seeder
             ],
             [
                 'name' => 'Ikan Bakar',
-                'calories_per_100g' => 180,
+                'calories' => 180,
                 'description' => 'Ikan bakar tanpa minyak',
                 'is_verified' => true,
                 'tags' => ['ikan', 'protein', 'bakar'],

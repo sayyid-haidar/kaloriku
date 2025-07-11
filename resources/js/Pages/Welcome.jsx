@@ -4,23 +4,21 @@ export default function Welcome({ auth }) {
     return (
         <>
             <Head title="KaloriKu - Aplikasi Pencatat Kalori Terpilih di Indonesia" />
-            <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-blue-50">
+            <div className="min-h-screen bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50">
                 {/* Navigation */}
                 <nav className="relative z-10 flex items-center justify-between px-6 py-4 lg:px-8">
                     <div className="flex items-center space-x-3">
-                        {/* App Logo/Icon */}
-                        <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center shadow-lg">
-                            <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M12 2L13.09 8.26L21 9L13.09 9.74L12 16L10.91 9.74L3 9L10.91 8.26L12 2ZM12 11C13.1 11 14 10.1 14 9S13.1 7 12 7 10 7.9 10 9 10.9 11 12 11ZM12 13C9.79 13 8 14.79 8 17S9.79 21 12 21 16 19.21 16 17 14.21 13 12 13ZM12 15C13.1 15 14 15.9 14 17S13.1 19 12 19 10 18.1 10 17 10.9 15 12 15Z"/>
-                            </svg>
+                        {/* App Logo - Text Only */}
+                        <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center shadow-lg">
+                            <span className="text-white font-bold text-lg">K</span>
                         </div>
-                        <span className="text-2xl font-bold text-green-600">KaloriKu</span>
+                        <span className="text-2xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">KaloriKu</span>
                     </div>
                     <div className="flex items-center space-x-4">
                         {auth.user ? (
                             <Link
                                 href={route('dashboard')}
-                                className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg font-medium transition-colors"
+                                className="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white px-6 py-2 rounded-lg font-medium transition-all"
                             >
                                 Dashboard
                             </Link>
@@ -28,13 +26,13 @@ export default function Welcome({ auth }) {
                             <>
                                 <Link
                                     href={route('login')}
-                                    className="text-gray-600 hover:text-gray-800 px-4 py-2 font-medium transition-colors"
+                                    className="text-green-600 hover:text-green-800 px-4 py-2 font-medium transition-colors"
                                 >
                                     Masuk
                                 </Link>
                                 <Link
                                     href={route('register')}
-                                    className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg font-medium transition-colors"
+                                    className="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white px-6 py-2 rounded-lg font-medium transition-all"
                                 >
                                     Daftar Gratis
                                 </Link>
@@ -84,13 +82,13 @@ export default function Welcome({ auth }) {
                                 <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                                     <Link
                                         href={route('register')}
-                                        className="bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-xl font-semibold text-lg transition-all transform hover:scale-105 shadow-lg"
+                                        className="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white px-8 py-4 rounded-xl font-semibold text-lg transition-all transform hover:scale-105 shadow-lg"
                                     >
                                         Mulai Hidup Sehat Sekarang
                                     </Link>
                                     <Link
                                         href="#how-it-works"
-                                        className="border-2 border-green-600 text-green-600 hover:bg-green-50 px-8 py-4 rounded-xl font-semibold text-lg transition-all"
+                                        className="border-2 border-green-500 text-green-600 hover:bg-green-50 px-8 py-4 rounded-xl font-semibold text-lg transition-all"
                                     >
                                         Lihat Cara Kerja
                                     </Link>
@@ -99,21 +97,15 @@ export default function Welcome({ auth }) {
                                 {/* Trust Indicators */}
                                 <div className="mt-8 flex flex-wrap items-center justify-center lg:justify-start gap-4 text-sm text-gray-500">
                                     <span className="flex items-center gap-2">
-                                        <svg className="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                                        </svg>
+                                        <span className="w-2 h-2 bg-slate-400 rounded-full"></span>
                                         100% Gratis
                                     </span>
                                     <span className="flex items-center gap-2">
-                                        <svg className="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                                        </svg>
+                                        <span className="w-2 h-2 bg-slate-400 rounded-full"></span>
                                         Tanpa Iklan
                                     </span>
                                     <span className="flex items-center gap-2">
-                                        <svg className="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                                        </svg>
+                                        <span className="w-2 h-2 bg-slate-400 rounded-full"></span>
                                         Data Aman
                                     </span>
                                 </div>
@@ -132,7 +124,7 @@ export default function Welcome({ auth }) {
                                             {/* Screen Content */}
                                             <div className="w-full h-full bg-white rounded-[2.2rem] overflow-hidden relative">
                                                 {/* Status Bar */}
-                                                <div className="bg-gradient-to-r from-orange-400 to-red-500 h-12 flex items-center justify-between px-6 pt-2">
+                                                <div className="bg-gradient-to-r from-green-500 to-emerald-600 h-12 flex items-center justify-between px-6 pt-2">
                                                     <div className="text-white text-xs font-medium">9:41</div>
                                                     <div className="flex items-center space-x-1">
                                                         <div className="w-4 h-2 bg-white rounded-sm opacity-80"></div>
@@ -141,25 +133,25 @@ export default function Welcome({ auth }) {
                                                 </div>
 
                                                 {/* App Content */}
-                                                <div className="flex-1 bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800 px-4 py-4">
+                                                <div className="flex-1 bg-gradient-to-br from-green-500 via-emerald-600 to-teal-600 px-4 py-4">
                                                     {/* Header */}
                                                     <div className="text-white mb-4">
                                                         <h3 className="text-lg font-bold">Selamat Siang!</h3>
-                                                        <p className="text-blue-100 text-sm">Haidar</p>
+                                                        <p className="text-slate-200 text-sm">Haidar</p>
                                                     </div>
 
                                                     {/* Calorie Progress Card */}
                                                     <div className="bg-white/10 backdrop-blur rounded-xl p-4 mb-4">
                                                         <div className="text-white text-center">
-                                                            <p className="text-xs text-blue-100 mb-1">Kalori Hari Ini</p>
+                                                            <p className="text-xs text-slate-200 mb-1">Kalori Hari Ini</p>
                                                             <p className="text-2xl font-bold">1,420</p>
-                                                            <p className="text-xs text-blue-200">dari 2,000 target</p>
+                                                            <p className="text-xs text-slate-300">dari 2,000 target</p>
 
                                                             {/* Progress Bar */}
                                                             <div className="bg-white/20 rounded-full h-2 mt-3 overflow-hidden">
                                                                 <div className="bg-green-400 h-full rounded-full" style={{width: '71%'}}></div>
                                                             </div>
-                                                            <p className="text-xs text-blue-200 mt-1">71% • Sisa 580 kal</p>
+                                                            <p className="text-xs text-slate-300 mt-1">71% • Sisa 580 kal</p>
                                                         </div>
                                                     </div>
                                                 </div>

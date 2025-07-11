@@ -74,7 +74,7 @@ class HomeController extends Controller
         ];
 
         // Get user's favorite foods for quick add
-        $favoriteFoods = UserFavoriteFood::with('food:id,name,calories_per_100g,brand')
+        $favoriteFoods = UserFavoriteFood::with('food:id,name,calories,brand')
             ->where('user_id', $user->id)
             ->limit(6)
             ->get()
@@ -82,7 +82,7 @@ class HomeController extends Controller
                 return [
                     'id' => $favorite->food->id,
                     'name' => $favorite->food->name,
-                    'calories_per_100g' => $favorite->food->calories_per_100g,
+                    'calories' => $favorite->food->calories,
                     'brand' => $favorite->food->brand,
                 ];
             });

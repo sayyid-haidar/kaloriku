@@ -2,6 +2,7 @@ import { Head, useForm, router } from '@inertiajs/react';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import MobileLayout from '@/Layouts/MobileLayout';
+import { theme, variants } from '@/constants/theme';
 import {
     PlusIcon,
     ClockIcon,
@@ -11,7 +12,8 @@ import {
     ArrowLeftIcon,
     HeartIcon,
     ExclamationTriangleIcon,
-    ChartBarIcon
+    ChartBarIcon,
+    DocumentTextIcon
 } from '@heroicons/react/24/outline';
 import {
     HeartIcon as HeartSolidIcon,
@@ -65,13 +67,13 @@ export default function SimpleAddPage({
         try {
             const response = await axios.post('/favorites/add', {
                 food_name: data.food_name,
-                calories_per_100g: data.calories,
+                calories: data.calories,
             });
 
             // Update local favorites state
             setFavorites(prev => [...prev, {
                 name: data.food_name,
-                calories_per_100g: data.calories
+                calories: data.calories
             }]);
 
             // Show success message
@@ -157,8 +159,8 @@ export default function SimpleAddPage({
     const handleFavoriteClick = (food) => {
         setData({
             food_name: food.name,
-            calories: food.calories_per_100g ? Math.round(food.calories_per_100g).toString() : '',
-            notes: `${food.brand ? food.brand + ' - ' : ''}Estimasi per 100g`,
+            calories: food.calories ? Math.round(food.calories).toString() : '',
+            notes: `${food.brand ? food.brand + ' - ' : ''}Dari favorit`,
             meal_type: data.meal_type || getCurrentMealType()
         });
     };
@@ -211,6 +213,8 @@ export default function SimpleAddPage({
         <MobileLayout showAddButton={false}>
             <Head title="Tambah Makanan - kaloriKu" />
 
+            <div className="min-h-screen bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50">
+
             {/* Success Animation */}
             {showSuccess && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -239,7 +243,7 @@ export default function SimpleAddPage({
 
             {/* Calorie Alert */}
             {showCalorieAlert && (
-                <div className="fixed top-4 left-4 right-4 bg-orange-100 border border-orange-400 text-orange-700 px-4 py-3 rounded-xl z-40 animate-pulse">
+                <div className="fixed top-4 left-4 right-4 bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded-xl z-40 animate-pulse">
                     <div className="flex items-center">
                         <ExclamationTriangleIcon className="h-5 w-5 mr-2" />
                         <span className="text-sm font-medium">
@@ -249,9 +253,9 @@ export default function SimpleAddPage({
                 </div>
             )}
 
-            {/* Header with Calorie Progress */}
-            <div className="bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800 text-white p-6 rounded-b-3xl shadow-lg">
-                <div className="flex items-center space-x-3 mb-4">
+            {/* Clean Minimalist Header */}
+            <div className="bg-gradient-to-br from-green-500 via-emerald-600 to-teal-600 text-white p-6 rounded-b-3xl shadow-xl">
+                <div className="flex items-center space-x-3 mb-6">
                     <button
                         className="p-2 hover:bg-white/10 rounded-xl transition-colors"
                         onClick={() => window.history.back()}
@@ -259,56 +263,70 @@ export default function SimpleAddPage({
                         <ArrowLeftIcon className="w-6 h-6" />
                     </button>
                     <div className="flex-1">
-                        <h1 className="text-2xl font-bold">Tambah Makanan</h1>
-                        <p className="text-blue-100 text-sm">Catat kalori dengan mudah</p>
+                        <h1 className="text-2xl font-bold flex items-center space-x-2">
+                            <PlusIcon className="w-7 h-7 text-white" />
+                            <span>Tambah Makanan</span>
+                        </h1>
+                        <p className="text-white/80 text-sm flex items-center space-x-1 mt-1">
+                            <SparklesIcon className="w-4 h-4" />
+                            <span>Catat kalori dengan mudah</span>
+                        </p>
                     </div>
-                    <div className="text-right">
-                        <p className="text-sm text-blue-100">Target</p>
-                        <p className="text-lg font-bold">{calorieTarget}</p>
+                    <div className="text-center">
+                        <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center mb-1">
+                            <FireIcon className="w-6 h-6 text-white" />
+                        </div>
+                        <p className="text-xs text-white/70">{calorieTarget}</p>
                     </div>
                 </div>
 
-                {/* Calorie Progress Bar */}
-                <div className="bg-white/10 backdrop-blur rounded-xl p-4 mb-4">
-                    <div className="flex items-center justify-between mb-3">
-                        <div className="flex items-center space-x-2">
-                            <FireIcon className="w-5 h-5 text-orange-300" />
-                            <span className="text-sm font-medium text-white">{currentTodayTotal} kalori</span>
+                {/* Enhanced Calorie Progress Card */}
+                <div className="bg-white/10 backdrop-blur rounded-xl p-5 border border-white/20">
+                    <div className="flex items-center justify-between mb-4">
+                        <div className="flex items-center space-x-3">
+                            <div className="p-2 bg-green-100/20 rounded-lg">
+                                <FireIcon className="w-5 h-5 text-green-200" />
+                            </div>
+                            <div>
+                                <p className="text-sm text-white/70">Kalori Hari Ini</p>
+                                <p className="text-xl font-bold text-white">{currentTodayTotal}</p>
+                            </div>
                         </div>
                         <div className="text-right">
-                            <span className={`text-sm font-bold ${
-                                isOverTarget ? 'text-red-300' : isNearTarget ? 'text-orange-300' : 'text-green-300'
+                            <p className={`text-2xl font-bold ${
+                                isOverTarget ? 'text-red-300' : isNearTarget ? 'text-yellow-300' : 'text-green-300'
                             }`}>
                                 {caloriePercentage}%
-                            </span>
-                            <p className="text-xs text-blue-100">dari target</p>
+                            </p>
+                            <p className="text-xs text-white/60">dari target</p>
                         </div>
                     </div>
 
-                    <div className="bg-white/20 rounded-full h-4 overflow-hidden mb-2 relative">
+                    {/* Clean Progress Bar */}
+                    <div className="bg-white/20 rounded-full h-3 mb-3 overflow-hidden">
                         <div
-                            className={`h-full transition-all duration-700 ${
+                            className={`h-full rounded-full transition-all duration-1000 ${
                                 isOverTarget
                                     ? 'bg-gradient-to-r from-red-400 to-red-500'
                                     : isNearTarget
-                                        ? 'bg-gradient-to-r from-orange-400 to-orange-500'
-                                        : 'bg-gradient-to-r from-green-400 to-green-500'
+                                        ? 'bg-gradient-to-r from-yellow-400 to-yellow-500'
+                                        : 'bg-gradient-to-r from-green-400 to-emerald-500'
                             }`}
                             style={{ width: `${Math.min(caloriePercentage, 100)}%` }}
                         />
                     </div>
 
                     <div className="flex justify-between items-center">
-                        <div className="text-xs text-blue-100">
+                        <div className="text-xs text-white/70">
                             {isOverTarget ? (
-                                <span className="text-red-300 font-medium">
+                                <span className="text-red-200 font-medium">
                                     Kelebihan: {currentTodayTotal - calorieTarget} kal
                                 </span>
                             ) : (
                                 <span>Tersisa: {remainingCalories} kal</span>
                             )}
                         </div>
-                        <div className="text-xs text-blue-100">
+                        <div className="text-xs text-white/70">
                             Target: {calorieTarget} kal
                         </div>
                     </div>
@@ -317,55 +335,69 @@ export default function SimpleAddPage({
                 {/* Quick Stats */}
                 <div className="flex items-center space-x-4 bg-white/10 rounded-xl p-3">
                     <div className="flex items-center space-x-2">
-                        <ChartBarIcon className="w-5 h-5 text-green-300" />
-                        <span className="text-sm font-medium">Quick Add</span>
+                        <ChartBarIcon className="w-5 h-5 text-white/70" />
+                        <span className="text-sm font-medium text-white">Quick Add</span>
                     </div>
                     <div className="flex items-center space-x-2">
-                        <HeartIcon className="w-5 h-5 text-pink-300" />
-                        <span className="text-sm font-medium">{favorites.length} Favorit</span>
+                        <HeartIcon className="w-5 h-5 text-white/70" />
+                        <span className="text-sm font-medium text-white">{favorites.length} Favorit</span>
                     </div>
                 </div>
             </div>
 
             {/* Main Content */}
             <div className="p-6 space-y-6">
-                {/* Quick Add Form */}
-                <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-                    <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-4 border-b border-gray-100">
+                {/* Enhanced Quick Add Form */}
+                <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+                    <div className="bg-gradient-to-r from-green-50 to-emerald-50 p-4 border-b border-green-100">
                         <h2 className="text-lg font-bold text-gray-900 flex items-center space-x-2">
-                            <PlusIcon className="w-5 h-5 text-blue-600" />
+                            <PlusIcon className="w-5 h-5 text-slate-600" />
                             <span>Tambah Cepat</span>
                         </h2>
                         <p className="text-sm text-gray-600 mt-1">Masukkan makanan dan kalori langsung</p>
                     </div>
 
                     <div className="p-6">
-                        <form onSubmit={handleQuickAdd} className="space-y-4">
-                            {/* Food Name */}
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">
-                                    Nama makanan *
+                        <form onSubmit={handleQuickAdd} className="space-y-6">
+                            {/* Enhanced Food Name Input */}
+                            <div className="space-y-2">
+                                <label className="flex items-center text-sm font-semibold text-gray-700 space-x-2">
+                                    <span className="w-2 h-2 bg-green-500 rounded-full"></span>
+                                    <span>Nama makanan</span>
+                                    <span className="text-yellow-500">*</span>
                                 </label>
-                                <input
-                                    type="text"
-                                    placeholder="Contoh: Nasi gudeg + ayam, Mie ayam bakso..."
-                                    value={data.food_name}
-                                    onChange={(e) => setData('food_name', e.target.value)}
-                                    className={`w-full px-4 py-3 rounded-xl border-0 bg-gray-50 text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all ${
-                                        localErrors.food_name ? 'ring-2 ring-red-500' : ''
-                                    }`}
-                                    disabled={processing}
-                                />
+                                <div className="relative">
+                                    <input
+                                        type="text"
+                                        placeholder="Mie ayam bakso, Nasi gudeg + ayam, Gado-gado..."
+                                        value={data.food_name}
+                                        onChange={(e) => setData('food_name', e.target.value)}
+                                        className={`w-full px-4 py-4 rounded-xl border-2 bg-gray-50 text-gray-900 placeholder-gray-400 focus:border-green-500 focus:bg-white focus:ring-2 focus:ring-green-100 transition-all duration-200 ${
+                                            localErrors.food_name ? 'border-yellow-300 focus:border-yellow-500 focus:ring-yellow-100' : 'border-gray-200'
+                                        }`}
+                                        disabled={processing}
+                                    />
+                                    {data.food_name && (
+                                        <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                                            <CheckCircleIcon className="w-5 h-5 text-slate-500" />
+                                        </div>
+                                    )}
+                                </div>
                                 {localErrors.food_name && (
-                                    <p className="text-red-500 text-sm mt-1">{localErrors.food_name}</p>
+                                    <p className="text-yellow-600 text-sm flex items-center space-x-1">
+                                        <ExclamationTriangleIcon className="w-4 h-4" />
+                                        <span>{localErrors.food_name}</span>
+                                    </p>
                                 )}
                             </div>
 
-                            {/* Calories & Notes Row */}
-                            <div className="grid grid-cols-5 gap-3">
-                                <div className="col-span-2">
-                                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                                        Kalori *
+                            {/* Enhanced Calories & Notes Row */}
+                            <div className="grid grid-cols-5 gap-4">
+                                <div className="col-span-2 space-y-2">
+                                    <label className="flex items-center text-sm font-semibold text-gray-700 space-x-2">
+                                        <span className="w-2 h-2 bg-yellow-500 rounded-full"></span>
+                                        <span>Kalori</span>
+                                        <span className="text-yellow-500">*</span>
                                     </label>
                                     <div className="relative">
                                         <input
@@ -373,66 +405,126 @@ export default function SimpleAddPage({
                                             placeholder="300"
                                             value={data.calories}
                                             onChange={(e) => setData('calories', e.target.value)}
-                                            className={`w-full px-4 py-3 text-lg font-semibold text-center rounded-xl border-0 bg-gray-50 text-gray-900 focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all ${
-                                                localErrors.calories ? 'ring-2 ring-red-500' : ''
+                                            className={`w-full px-4 py-4 text-lg font-bold text-center rounded-xl border-2 bg-gradient-to-br from-green-50 to-emerald-50 text-gray-900 focus:border-yellow-500 focus:bg-white focus:ring-2 focus:ring-yellow-100 transition-all duration-200 ${
+                                                localErrors.calories ? 'border-yellow-300 focus:border-yellow-500 focus:ring-yellow-100' : 'border-orange-200'
                                             }`}
                                             min="1"
                                             max="99999"
                                             disabled={processing}
                                         />
                                         <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-                                            <span className="text-sm text-gray-500">kal</span>
+                                            <span className="text-sm font-medium text-yellow-600">kcal</span>
                                         </div>
+                                        {data.calories && (
+                                            <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
+                                                <FireIcon className="w-4 h-4 text-yellow-500" />
+                                            </div>
+                                        )}
                                     </div>
                                     {localErrors.calories && (
-                                        <p className="text-red-500 text-sm mt-1">{localErrors.calories}</p>
+                                        <p className="text-yellow-600 text-sm flex items-center space-x-1">
+                                            <ExclamationTriangleIcon className="w-4 h-4" />
+                                            <span>{localErrors.calories}</span>
+                                        </p>
                                     )}
                                 </div>
 
-                                <div className="col-span-3">
-                                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                                        Catatan (opsional)
+                                <div className="col-span-3 space-y-2">
+                                    <label className="flex items-center text-sm font-semibold text-gray-700 space-x-2">
+                                        <span className="w-2 h-2 bg-purple-500 rounded-full"></span>
+                                        <span>Catatan</span>
+                                        <span className="text-gray-400 text-xs">(opsional)</span>
                                     </label>
-                                    <textarea
-                                        placeholder="Porsi, merk, tambahan..."
-                                        rows="2"
-                                        value={data.notes}
-                                        onChange={(e) => setData('notes', e.target.value)}
-                                        className="w-full px-4 py-3 rounded-xl border-0 bg-gray-50 text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all"
-                                        maxLength="500"
-                                        disabled={processing}
-                                    />
+                                    <div className="relative">
+                                        <textarea
+                                            placeholder="Porsi besar, merk Indomie, pakai telor..."
+                                            rows="2"
+                                            value={data.notes}
+                                            onChange={(e) => setData('notes', e.target.value)}
+                                            className="w-full px-4 py-4 rounded-xl border-2 bg-purple-50 text-gray-900 placeholder-gray-400 focus:border-purple-500 focus:bg-white focus:ring-2 focus:ring-purple-100 transition-all duration-200 border-purple-200 resize-none"
+                                            maxLength="500"
+                                            disabled={processing}
+                                        />
+                                        {data.notes && (
+                                            <div className="absolute bottom-2 right-3">
+                                                <span className="text-xs text-gray-400">{data.notes.length}/500</span>
+                                            </div>
+                                        )}
+                                    </div>
                                 </div>
                             </div>
 
-                            {/* Meal Type Selection */}
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-4">
-                                    <span className="flex items-center space-x-2">
-                                        <ClockIcon className="w-4 h-4" />
-                                        <span>Kapan kamu makan ini?</span>
-                                    </span>
+                            {/* Enhanced Meal Type Selection */}
+                            <div className="space-y-3">
+                                <label className="flex items-center text-sm font-semibold text-gray-700 space-x-2">
+                                    <ClockIcon className="w-4 h-4 text-blue-600" />
+                                    <span>Kapan kamu makan ini?</span>
                                 </label>
                                 <div className="grid grid-cols-2 gap-3">
                                     {[
-                                        { value: 'breakfast', label: 'Sarapan', icon: '🌅', time: '05:00-11:00', color: 'from-amber-400 to-orange-500', bgColor: 'bg-amber-50', borderColor: 'border-amber-200', textColor: 'text-amber-700' },
-                                        { value: 'lunch', label: 'Makan Siang', icon: '☀️', time: '11:00-15:00', color: 'from-orange-400 to-red-500', bgColor: 'bg-orange-50', borderColor: 'border-orange-200', textColor: 'text-orange-700' },
-                                        { value: 'dinner', label: 'Makan Malam', icon: '🌙', time: '15:00-20:00', color: 'from-indigo-400 to-purple-600', bgColor: 'bg-indigo-50', borderColor: 'border-indigo-200', textColor: 'text-indigo-700' },
-                                        { value: 'snack', label: 'Snack', icon: '🍪', time: 'Kapan saja', color: 'from-emerald-400 to-teal-500', bgColor: 'bg-emerald-50', borderColor: 'border-emerald-200', textColor: 'text-emerald-700' }
+                                        {
+                                            value: 'breakfast',
+                                            label: 'Sarapan',
+                                            icon: '🌅',
+                                            time: '05:00-11:00',
+                                            gradient: 'from-yellow-400 via-orange-400 to-red-400',
+                                            bg: 'from-yellow-50 to-orange-50',
+                                            border: 'border-yellow-200',
+                                            text: 'text-orange-700'
+                                        },
+                                        {
+                                            value: 'lunch',
+                                            label: 'Makan Siang',
+                                            icon: '☀️',
+                                            time: '11:00-15:00',
+                                            gradient: 'from-blue-400 via-cyan-400 to-green-400',
+                                            bg: 'from-blue-50 to-green-50',
+                                            border: 'border-blue-200',
+                                            text: 'text-blue-700'
+                                        },
+                                        {
+                                            value: 'dinner',
+                                            label: 'Makan Malam',
+                                            icon: '🌙',
+                                            time: '15:00-20:00',
+                                            gradient: 'from-purple-400 via-pink-400 to-red-400',
+                                            bg: 'from-purple-50 to-pink-50',
+                                            border: 'border-purple-200',
+                                            text: 'text-purple-700'
+                                        },
+                                        {
+                                            value: 'snack',
+                                            label: 'Snack',
+                                            icon: '🍪',
+                                            time: 'Kapan saja',
+                                            gradient: 'from-green-400 via-emerald-400 to-teal-400',
+                                            bg: 'from-green-50 to-emerald-50',
+                                            border: 'border-green-200',
+                                            text: 'text-green-700'
+                                        }
                                     ].map((meal) => (
                                         <button
                                             key={meal.value}
                                             type="button"
                                             onClick={() => setData('meal_type', meal.value)}
-                                            className={`relative p-4 rounded-2xl border-2 transition-all duration-300 transform hover:scale-[1.02] ${
+                                            className={`relative p-4 rounded-2xl border-2 transition-all duration-300 transform hover:scale-[1.02] hover:shadow-lg ${
                                                 data.meal_type === meal.value
-                                                    ? `border-transparent bg-gradient-to-br ${meal.color} text-white shadow-xl`
-                                                    : `${meal.borderColor} ${meal.bgColor} ${meal.textColor} hover:shadow-lg`
+                                                    ? `border-transparent bg-gradient-to-br ${meal.gradient} text-white shadow-xl ring-2 ring-offset-2 ring-green-500`
+                                                    : `${meal.border} bg-gradient-to-br ${meal.bg} ${meal.text} hover:shadow-md`
                                             }`}
                                             disabled={processing}
                                         >
+                                            {/* Enhanced Selection Indicator */}
+                                            {data.meal_type === meal.value && (
+                                                <div className="absolute -top-2 -right-2">
+                                                    <div className="bg-white rounded-full p-1 shadow-lg">
+                                                        <CheckCircleIcon className="w-5 h-5 text-green-600" />
+                                                    </div>
+                                                </div>
+                                            )}
+
                                             <div className="text-center">
-                                                <div className="text-3xl mb-2">{meal.icon}</div>
+                                                <div className="text-2xl mb-2 transform transition-transform duration-200 hover:scale-110">{meal.icon}</div>
                                                 <div className="font-bold text-sm mb-1">{meal.label}</div>
                                                 <div className={`text-xs font-medium ${
                                                     data.meal_type === meal.value ? 'text-white/90' : 'opacity-60'
@@ -440,56 +532,52 @@ export default function SimpleAddPage({
                                                     {meal.time}
                                                 </div>
                                             </div>
-
-                                            {/* Selected indicator */}
-                                            {data.meal_type === meal.value && (
-                                                <div className="absolute -top-2 -right-2 bg-white rounded-full p-1 shadow-lg">
-                                                    <CheckCircleIcon className="w-4 h-4 text-green-600" />
-                                                </div>
-                                            )}
                                         </button>
                                     ))}
                                 </div>
                             </div>
 
-                            {/* Action Buttons */}
-                            <div className="space-y-4">
+                            {/* Enhanced Action Buttons */}
+                            <div className="space-y-4 pt-2">
                                 {/* Primary Action - Add to Diary */}
                                 <button
                                     type="submit"
                                     disabled={processing || !data.food_name.trim() || !data.calories}
-                                    className="w-full bg-gradient-to-r from-orange-500 to-red-500 text-white py-4 rounded-2xl font-bold text-lg hover:from-orange-600 hover:to-red-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] shadow-xl hover:shadow-2xl"
+                                    className="w-full bg-gradient-to-r from-green-500 via-green-600 to-emerald-600 text-white py-4 rounded-2xl font-bold text-lg hover:from-green-600 hover:to-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] shadow-xl hover:shadow-2xl border-2 border-transparent hover:border-green-300"
                                 >
                                     {processing ? (
                                         <div className="flex items-center justify-center space-x-3">
                                             <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-white"></div>
-                                            <span>Menambahkan ke Diary...</span>
+                                            <span className="font-semibold">Menambahkan ke Diary...</span>
                                         </div>
                                     ) : (
                                         <div className="flex items-center justify-center space-x-3">
-                                            <div className="bg-white/20 rounded-full p-1">
+                                            <div className="bg-white/20 rounded-full p-2">
                                                 <PlusIcon className="w-5 h-5" />
                                             </div>
                                             <div className="text-left">
                                                 <div className="font-bold">Tambah ke Diary</div>
-                                                <div className="text-sm opacity-90">{data.calories || 0} kalori • {data.meal_type ? data.meal_type.charAt(0).toUpperCase() + data.meal_type.slice(1) : 'Waktu makan'}</div>
+                                                <div className="text-sm opacity-90">
+                                                    {data.calories || 0} kalori • {data.meal_type ? (data.meal_type.charAt(0).toUpperCase() + data.meal_type.slice(1)) : 'Pilih waktu makan'}
+                                                </div>
                                             </div>
                                         </div>
                                     )}
                                 </button>
 
-                                {/* Secondary Actions */}
+                                {/* Enhanced Secondary Actions */}
                                 <div className="grid grid-cols-2 gap-3">
                                     {/* Add to Favorites */}
                                     <button
                                         type="button"
                                         onClick={handleAddToFavorites}
                                         disabled={addingToFavorites || !data.food_name.trim() || !data.calories}
-                                        className="bg-white border-2 border-pink-200 text-pink-600 py-3 px-4 rounded-xl font-semibold text-sm hover:border-pink-300 hover:bg-pink-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98]"
+                                        className="bg-gradient-to-r from-pink-50 to-rose-50 border-2 border-pink-200 text-pink-700 py-3 px-4 rounded-xl font-semibold text-sm hover:border-pink-300 hover:bg-gradient-to-r hover:from-pink-100 hover:to-rose-100 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] shadow-md hover:shadow-lg"
                                     >
                                         {addingToFavorites ? (
                                             <div className="flex items-center justify-center space-x-2">
                                                 <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-pink-600"></div>
+                                                <span>Saving...</span>
                                             </div>
                                         ) : (
                                             <div className="flex items-center justify-center space-x-2">
@@ -521,13 +609,6 @@ export default function SimpleAddPage({
                                     </button>
                                 </div>
                             </div>
-
-                            {/* Error Message */}
-                            {localErrors.submit && (
-                                <div className="text-red-500 text-sm bg-red-50 p-3 rounded-lg border border-red-200">
-                                    {localErrors.submit}
-                                </div>
-                            )}
                         </form>
                     </div>
                 </div>
@@ -558,7 +639,7 @@ export default function SimpleAddPage({
                                     </div>
                                     <div className="text-xs text-gray-600">
                                         <p className="font-semibold text-pink-600">
-                                            {food.calories_per_100g} kal/100g
+                                            {food.calories} kal/porsi
                                         </p>
                                         {food.brand && (
                                             <p className="opacity-75">{food.brand}</p>
@@ -616,6 +697,7 @@ export default function SimpleAddPage({
                         </div>
                     </div>
                 )}
+            </div>
             </div>
         </MobileLayout>
     );

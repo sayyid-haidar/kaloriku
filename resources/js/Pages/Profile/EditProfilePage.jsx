@@ -62,7 +62,7 @@ export default function EditProfilePage({ auth, userProfile, activityLevels }) {
                                 type="text"
                                 value={data.name}
                                 onChange={e => setData('name', e.target.value)}
-                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
                                 required
                             />
                             {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
@@ -76,7 +76,7 @@ export default function EditProfilePage({ auth, userProfile, activityLevels }) {
                                 type="email"
                                 value={data.email}
                                 onChange={e => setData('email', e.target.value)}
-                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
                                 required
                             />
                             {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
@@ -92,7 +92,7 @@ export default function EditProfilePage({ auth, userProfile, activityLevels }) {
                                 onClick={() => handleGenderChange('male')}
                                 className={`flex-1 py-2 px-4 rounded-lg border transition-colors ${
                                     selectedGender === 'male'
-                                        ? 'bg-blue-50 border-blue-200 text-blue-700'
+                                        ? 'bg-green-50 border-green-200 text-green-700'
                                         : 'bg-gray-50 border-gray-200 text-gray-600'
                                 }`}
                             >
@@ -103,7 +103,7 @@ export default function EditProfilePage({ auth, userProfile, activityLevels }) {
                                 onClick={() => handleGenderChange('female')}
                                 className={`flex-1 py-2 px-4 rounded-lg border transition-colors ${
                                     selectedGender === 'female'
-                                        ? 'bg-blue-50 border-blue-200 text-blue-700'
+                                        ? 'bg-green-50 border-green-200 text-green-700'
                                         : 'bg-gray-50 border-gray-200 text-gray-600'
                                 }`}
                             >
@@ -122,7 +122,7 @@ export default function EditProfilePage({ auth, userProfile, activityLevels }) {
                                 type="number"
                                 value={data.age}
                                 onChange={e => setData('age', e.target.value)}
-                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
                                 placeholder="Masukkan usia"
                                 min="1"
                                 max="120"
@@ -139,7 +139,7 @@ export default function EditProfilePage({ auth, userProfile, activityLevels }) {
                                 step="0.1"
                                 value={data.weight}
                                 onChange={e => setData('weight', e.target.value)}
-                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
                                 placeholder="Masukkan berat badan"
                                 min="1"
                                 max="500"
@@ -155,7 +155,7 @@ export default function EditProfilePage({ auth, userProfile, activityLevels }) {
                                 type="number"
                                 value={data.height}
                                 onChange={e => setData('height', e.target.value)}
-                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
                                 placeholder="Masukkan tinggi badan"
                                 min="50"
                                 max="300"
@@ -175,7 +175,7 @@ export default function EditProfilePage({ auth, userProfile, activityLevels }) {
                                     onClick={() => handleActivityChange(level.id, level.name)}
                                     className={`w-full p-4 rounded-lg border text-left transition-colors ${
                                         selectedActivity === level.id
-                                            ? 'bg-blue-50 border-blue-200'
+                                            ? 'bg-green-50 border-green-200'
                                             : 'bg-gray-50 border-gray-200 hover:bg-gray-100'
                                     }`}
                                 >
@@ -208,7 +208,7 @@ export default function EditProfilePage({ auth, userProfile, activityLevels }) {
                         <button
                             type="submit"
                             disabled={processing}
-                            className="w-full bg-blue-500 hover:bg-blue-600 disabled:opacity-50 text-white font-medium py-3 px-4 rounded-lg transition-colors"
+                            className="w-full bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 disabled:opacity-50 text-white font-medium py-3 px-4 rounded-lg transition-colors"
                         >
                             {processing ? 'Menyimpan...' : 'Simpan Perubahan'}
                         </button>

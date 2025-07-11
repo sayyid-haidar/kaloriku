@@ -22,8 +22,7 @@ class FavoriteFoodController extends Controller
                 return [
                     'id' => $favorite->food->id,
                     'name' => $favorite->food->name,
-                    'calories' => $favorite->food->calories_per_100g ?? 100,
-                    'calories_per_100g' => $favorite->food->calories_per_100g ?? 100,
+                    'calories' => $favorite->food->calories ?? 100,
                     'brand' => $favorite->food->brand ?? null,
                     'image' => null, // No image in basic structure
                     'favorite_id' => $favorite->id,
@@ -40,40 +39,45 @@ class FavoriteFoodController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'food_id' => 'sometimes|exists:foods,id',
-            'food_name' => 'required_without:food_id|string|max:255',
-            'calories_per_100g' => 'required_without:food_id|numeric|min:1',
-            'brand' => 'nullable|string|max:255'
-        ]);
-
-        $userId = Auth::id();
-
-        if ($request->has('food_id')) {
-            // Adding existing food to favorites
-            UserFavoriteFood::firstOrCreate([
-                'user_id' => $userId,
-                'food_id' => $request->food_id,
-            ]);
-        } else {
-            // Create new food and add to favorites
-            $food = \App\Models\Food::firstOrCreate([
-                'name' => $request->food_name,
-                'calories_per_100g' => $request->calories_per_100g,
-                'brand' => $request->brand ?? null,
+        try {
+            $request->validate([
+                'food_id' => 'sometimes|exists:foods,id',
+                'food_name' => 'required_without:food_id|string|max:255',
+                'calories' => 'required_without:food_id|numeric|min:1',
+                'brand' => 'nullable|string|max:255'
             ]);
 
-            UserFavoriteFood::firstOrCreate([
-                'user_id' => $userId,
-                'food_id' => $food->id,
-            ]);
+            $userId = Auth::id();
+
+            if ($request->has('food_id')) {
+                // Adding existing food to favorites
+                $favorite = UserFavoriteFood::firstOrCreate([
+                    'user_id' => $userId,
+                    'food_id' => $request->food_id,
+                ]);
+            } else {
+                // Create new food and add to favorites
+                $food = \App\Models\Food::firstOrCreate([
+                    'name' => $request->food_name,
+                    'calories' => $request->calories,
+                    'brand' => $request->brand ?? null,
+                ]);
+
+                $favorite = UserFavoriteFood::firstOrCreate([
+                    'user_id' => $userId,
+                    'food_id' => $food->id,
+                ]);
+            }
+
+            return back()->with('success', 'Makanan berhasil ditambahkan ke favorit!');
+
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return back()->withErrors($e->errors())->withInput();
+        } catch (\Exception $e) {
+            \Log::error('Error adding to favorites: ' . $e->getMessage());
+
+            return back()->withErrors(['error' => 'Gagal menambahkan ke favorit. Silakan coba lagi.']);
         }
-
-        if ($request->wantsJson()) {
-            return response()->json(['success' => true, 'message' => 'Makanan berhasil ditambahkan ke favorit!']);
-        }
-
-        return back()->with('success', 'Makanan ditambahkan ke favorit!');
     }
 
     /**

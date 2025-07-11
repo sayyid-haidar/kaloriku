@@ -55,7 +55,7 @@ class CalorieEntryController extends Controller
 
             // Get verified foods from database (optional)
             $verifiedFoods = Food::verified()
-                ->select('id', 'name', 'calories_per_100g', 'brand', 'tags')
+                ->select('id', 'name', 'calories', 'brand', 'tags')
                 ->orderBy('name')
                 ->limit(20)
                 ->get()
@@ -63,21 +63,21 @@ class CalorieEntryController extends Controller
                     return [
                         'id' => $food->id,
                         'name' => $food->name,
-                        'calories_per_100g' => $food->calories_per_100g,
+                        'calories' => $food->calories,
                         'brand' => $food->brand,
                         'tags' => $food->tags,
                     ];
                 });
 
             // Get user's favorite foods
-            $favoriteFoods = UserFavoriteFood::with('food:id,name,calories_per_100g,brand')
+            $favoriteFoods = UserFavoriteFood::with('food:id,name,calories,brand')
                 ->where('user_id', $user->id)
                 ->get()
                 ->map(function ($favorite) {
                     return [
                         'id' => $favorite->food->id,
                         'name' => $favorite->food->name,
-                        'calories_per_100g' => $favorite->food->calories_per_100g,
+                        'calories' => $favorite->food->calories,
                         'brand' => $favorite->food->brand,
                     ];
                 });
@@ -306,7 +306,7 @@ class CalorieEntryController extends Controller
             if (!$food && $request->calories <= 1000) { // Reasonable single food item
                 $food = Food::create([
                     'name' => trim($request->food_name),
-                    'calories_per_100g' => min($request->calories * 2, 900), // Estimate per 100g
+                    'calories' => min($request->calories * 2, 900), // Estimate per 100g
                     'is_verified' => false,
                     'created_by_user_id' => Auth::id(),
                 ]);

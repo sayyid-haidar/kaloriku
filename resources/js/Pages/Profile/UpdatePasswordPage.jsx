@@ -65,7 +65,7 @@ export default function UpdatePasswordPage({ status }) {
                                         type={showCurrentPassword ? "text" : "password"}
                                         value={data.current_password}
                                         onChange={e => setData('current_password', e.target.value)}
-                                        className="w-full px-3 py-2 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        className="w-full px-3 py-2 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
                                         placeholder="Masukkan password saat ini"
                                         required
                                     />
@@ -100,7 +100,7 @@ export default function UpdatePasswordPage({ status }) {
                                         type={showNewPassword ? "text" : "password"}
                                         value={data.password}
                                         onChange={e => setData('password', e.target.value)}
-                                        className="w-full px-3 py-2 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        className="w-full px-3 py-2 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
                                         placeholder="Masukkan password baru"
                                         required
                                     />
@@ -130,7 +130,7 @@ export default function UpdatePasswordPage({ status }) {
                                         type={showConfirmPassword ? "text" : "password"}
                                         value={data.password_confirmation}
                                         onChange={e => setData('password_confirmation', e.target.value)}
-                                        className="w-full px-3 py-2 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        className="w-full px-3 py-2 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
                                         placeholder="Konfirmasi password baru"
                                         required
                                     />
@@ -181,7 +181,7 @@ export default function UpdatePasswordPage({ status }) {
                         <button
                             type="submit"
                             disabled={processing}
-                            className="w-full bg-blue-500 hover:bg-blue-600 disabled:opacity-50 text-white font-medium py-3 px-4 rounded-lg transition-colors"
+                            className="w-full bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 disabled:opacity-50 text-white font-medium py-3 px-4 rounded-lg transition-colors"
                         >
                             {processing ? 'Menyimpan...' : 'Ubah Password'}
                         </button>

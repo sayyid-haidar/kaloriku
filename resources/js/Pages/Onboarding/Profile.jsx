@@ -131,7 +131,7 @@ export default function Profile() {
                         <button
                             type="submit"
                             disabled={processing}
-                            className="w-full bg-blue-500 hover:bg-blue-600 disabled:opacity-50 text-white font-semibold py-4 rounded-xl transition-colors"
+                            className="w-full bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 disabled:opacity-50 text-white font-semibold py-4 rounded-xl transition-colors"
                         >
                             {processing ? 'Memproses...' : 'Lanjut'}
                         </button>

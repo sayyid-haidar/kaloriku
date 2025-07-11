@@ -75,9 +75,9 @@ export default function MobileLayout({ children }) {
                                     href={item.href}
                                     className={`flex flex-col items-center space-y-1 px-3 py-2 rounded-lg transition-all duration-200 ${
                                         item.isAdd
-                                            ? 'bg-blue-600 text-white shadow-lg scale-110 -mt-2 rounded-full px-4 py-3'
+                                            ? 'bg-green-600 text-white shadow-lg scale-110 -mt-2 rounded-full px-4 py-3'
                                             : item.current
-                                                ? 'text-blue-600 bg-blue-50'
+                                                ? 'text-green-600 bg-green-50'
                                                 : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'
                                     }`}
                                 >

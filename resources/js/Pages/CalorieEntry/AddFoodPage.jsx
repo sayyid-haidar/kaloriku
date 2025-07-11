@@ -127,15 +127,15 @@ export default function AddFood({ foods, favoriteFoods, maxDate, minDate, error:
                 </div>
             )}
 
-            <div className="min-h-screen bg-gray-50">
+            <div className="min-h-screen bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50">
                 {/* Header */}
-                <div className="bg-white shadow-sm">
+                <div className="bg-white shadow-sm border-b border-green-200">
                     <div className="px-6 py-4">
                         <div className="flex items-center justify-between">
                             <div className="flex items-center space-x-4">
                                 <button
                                     onClick={() => window.history.back()}
-                                    className="p-2 -ml-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors"
+                                    className="p-2 -ml-2 text-green-600 hover:text-green-800 hover:bg-green-50 rounded-full transition-colors"
                                 >
                                     <XMarkIcon className="h-6 w-6" />
                                 </button>
@@ -170,7 +170,7 @@ export default function AddFood({ foods, favoriteFoods, maxDate, minDate, error:
                         <div className="flex items-center space-x-4">
                             <div className={`flex items-center space-x-2 ${selectedFood ? 'text-green-600' : 'text-blue-600'}`}>
                                 <div className={`w-6 h-6 rounded-full flex items-center justify-center text-sm font-medium ${
-                                    selectedFood ? 'bg-green-100 text-green-600' : 'bg-blue-100 text-blue-600'
+                                    selectedFood ? 'bg-green-100 text-green-600' : 'bg-green-100 text-green-600'
                                 }`}>
                                     {selectedFood ? <CheckCircleIcon className="w-4 h-4" /> : '1'}
                                 </div>
@@ -179,7 +179,7 @@ export default function AddFood({ foods, favoriteFoods, maxDate, minDate, error:
                             <div className="flex-1 h-px bg-gray-200"></div>
                             <div className={`flex items-center space-x-2 ${showPortionInput ? 'text-blue-600' : 'text-gray-400'}`}>
                                 <div className={`w-6 h-6 rounded-full flex items-center justify-center text-sm font-medium ${
-                                    showPortionInput ? 'bg-blue-100 text-blue-600' : 'bg-gray-100 text-gray-400'
+                                    showPortionInput ? 'bg-green-100 text-green-600' : 'bg-gray-100 text-gray-400'
                                 }`}>
                                     2
                                 </div>
@@ -226,7 +226,7 @@ export default function AddFood({ foods, favoriteFoods, maxDate, minDate, error:
                             onClick={() => setActiveTab('search')}
                             className={`py-3 px-4 text-center font-medium rounded-lg transition-all duration-200 ${
                                 activeTab === 'search'
-                                    ? 'bg-blue-600 text-white shadow-md'
+                                    ? 'bg-green-600 text-white shadow-md'
                                     : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
                             }`}
                         >
@@ -239,7 +239,7 @@ export default function AddFood({ foods, favoriteFoods, maxDate, minDate, error:
                             onClick={() => setActiveTab('favorites')}
                             className={`py-3 px-4 text-center font-medium rounded-lg transition-all duration-200 relative ${
                                 activeTab === 'favorites'
-                                    ? 'bg-blue-600 text-white shadow-md'
+                                    ? 'bg-green-600 text-white shadow-md'
                                     : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
                             }`}
                         >
@@ -294,7 +294,7 @@ export default function AddFood({ foods, favoriteFoods, maxDate, minDate, error:
                                                 onClick={() => handleFoodSelect(food)}
                                                 className={`relative bg-white rounded-xl border-2 transition-all duration-200 cursor-pointer group hover:shadow-md ${
                                                     selectedFood?.id === food.id
-                                                        ? 'border-blue-500 bg-blue-50 shadow-md'
+                                                        ? 'border-green-500 bg-green-50 shadow-md'
                                                         : 'border-gray-100 hover:border-gray-200'
                                                 }`}
                                             >
@@ -387,7 +387,7 @@ export default function AddFood({ foods, favoriteFoods, maxDate, minDate, error:
                                             onClick={() => handleFoodSelect(food)}
                                             className={`relative bg-white rounded-xl border-2 transition-all duration-200 cursor-pointer group hover:shadow-md ${
                                                 selectedFood?.id === food.id
-                                                    ? 'border-blue-500 bg-blue-50 shadow-md'
+                                                    ? 'border-green-500 bg-green-50 shadow-md'
                                                     : 'border-gray-100 hover:border-gray-200'
                                             }`}
                                         >
@@ -463,7 +463,7 @@ export default function AddFood({ foods, favoriteFoods, maxDate, minDate, error:
                 {/* Portion Input Section */}
                 {selectedFood && showPortionInput && (
                     <div className="mt-6 bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-                        <div className="bg-gradient-to-r from-blue-500 to-blue-600 px-6 py-4">
+                        <div className="bg-gradient-to-r from-green-500 to-emerald-600 px-6 py-4">
                             <div className="flex items-center space-x-3">
                                 <div className="w-10 h-10 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
                                     <CheckCircleIcon className="w-6 h-6 text-white" />
@@ -545,7 +545,7 @@ export default function AddFood({ foods, favoriteFoods, maxDate, minDate, error:
                             <button
                                 type="submit"
                                 disabled={processing || !selectedFood || portion <= 0}
-                                className="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white py-4 rounded-xl font-semibold text-lg hover:from-blue-700 hover:to-blue-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98]"
+                                className="w-full bg-gradient-to-r from-green-500 to-emerald-600 text-white py-4 rounded-xl font-semibold text-lg hover:from-green-600 hover:to-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] shadow-lg hover:shadow-xl"
                             >
                                 {processing ? (
                                     <div className="flex items-center justify-center space-x-2">

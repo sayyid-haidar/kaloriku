@@ -1,6 +1,7 @@
 import { Head, router } from '@inertiajs/react';
 import { useState } from 'react';
 import MobileLayout from '@/Layouts/MobileLayout';
+import { theme, variants } from '@/constants/theme';
 import {
     ChartBarIcon,
     TrophyIcon,
@@ -13,7 +14,9 @@ import {
     CheckCircleIcon,
     ExclamationTriangleIcon,
     ListBulletIcon,
-    EyeIcon
+    EyeIcon,
+    SparklesIcon,
+    BoltIcon
 } from '@heroicons/react/24/outline';
 
 export default function WeeklyStats({
@@ -79,103 +82,128 @@ export default function WeeklyStats({
         <MobileLayout>
             <Head title="Statistik & Riwayat - kaloriKu" />
 
-            {/* Header */}
-            <div className="bg-gradient-to-br from-indigo-600 via-purple-700 to-pink-600 text-white p-6 rounded-b-3xl shadow-lg">
-                <div className="flex items-center space-x-3 mb-6">
-                    <button
-                        className="p-2 hover:bg-white/10 rounded-xl transition-colors"
-                        onClick={() => router.visit('/home')}
-                    >
-                        <ArrowLeftIcon className="w-6 h-6" />
-                    </button>
-                    <div className="flex-1">
-                        <h1 className="text-2xl font-bold">Statistik & Riwayat</h1>
-                        <p className="text-indigo-100 text-sm">Data dan progress kalori</p>
-                    </div>
-                    <div className="text-right">
-                        <ChartBarIcon className="w-8 h-8 mx-auto mb-1" />
-                        <p className="text-xs">Analytics</p>
-                    </div>
-                </div>
-
-                {/* Tab Navigation */}
-                <div className="flex bg-white/10 rounded-xl p-1 mb-4">
-                    <button
-                        onClick={() => setActiveTab('statistics')}
-                        className={`flex-1 flex items-center justify-center space-x-2 py-3 px-4 rounded-lg font-medium transition-all ${
-                            activeTab === 'statistics'
-                                ? 'bg-white text-indigo-600 shadow-md'
-                                : 'text-white hover:bg-white/20'
-                        }`}
-                    >
-                        <ChartBarIcon className="w-5 h-5" />
-                        <span>Statistik</span>
-                    </button>
-                    <button
-                        onClick={() => setActiveTab('history')}
-                        className={`flex-1 flex items-center justify-center space-x-2 py-3 px-4 rounded-lg font-medium transition-all ${
-                            activeTab === 'history'
-                                ? 'bg-white text-indigo-600 shadow-md'
-                                : 'text-white hover:bg-white/20'
-                        }`}
-                    >
-                        <ListBulletIcon className="w-5 h-5" />
-                        <span>Riwayat</span>
-                    </button>
-                </div>
-            </div>
-
-            {/* Content */}
-            <div className="px-6 space-y-6 mt-6">
-                {/* Statistics Tab */}
-                {activeTab === 'statistics' && (
-                    <>
-                        {/* Weekly Summary Cards */}
-                        <div className="grid grid-cols-2 gap-4">
-                            <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
-                                <div className="flex items-center space-x-2 mb-2">
-                                    <FireIcon className="w-5 h-5 text-orange-500" />
-                                    <span className="text-sm font-medium text-gray-700">Total Kalori</span>
-                                </div>
-                                <p className="text-2xl font-bold text-gray-900">{formatNumber(weeklySummary.total_calories)}</p>
-                                <p className="text-xs text-gray-500">Target: {formatNumber(weeklySummary.weekly_target)}</p>
-                            </div>
-
-                            <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
-                                <div className="flex items-center space-x-2 mb-2">
-                                    <TrophyIcon className="w-5 h-5 text-yellow-500" />
-                                    <span className="text-sm font-medium text-gray-700">Konsistensi</span>
-                                </div>
-                                <p className="text-2xl font-bold text-gray-900">{weeklySummary.consistency_score}%</p>
-                                <p className="text-xs text-gray-500">{weeklySummary.active_days}/7 hari aktif</p>
-                            </div>
-                        </div>
-
-                        {/* Weekly Progress Bar */}
-                        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                            <div className="flex justify-between items-center mb-2">
-                                <span className="text-lg font-bold text-gray-900">Progress Mingguan</span>
-                                <span className="text-lg font-bold text-gray-900">{formatPercentage(weeklySummary.weekly_percentage)}%</span>
-                            </div>
-                            <div className="bg-gray-200 rounded-full h-4 overflow-hidden mb-2">
-                                <div
-                                    className={`h-full transition-all duration-500 ${
-                                        weeklySummary.weekly_percentage > 100
-                                            ? 'bg-red-500'
-                                            : weeklySummary.weekly_percentage >= 90
-                                                ? 'bg-green-500'
-                                                : 'bg-yellow-500'
-                                    }`}
-                                    style={{ width: `${Math.min(weeklySummary.weekly_percentage, 100)}%` }}
-                                />
-                            </div>
-                            <p className="text-sm text-gray-600">
-                                {weeklySummary.weekly_percentage > 100
-                                    ? `Kelebihan ${formatPercentage(weeklySummary.weekly_percentage - 100)}% dari target`
-                                    : `${formatPercentage(100 - weeklySummary.weekly_percentage)}% lagi untuk mencapai target`
-                                }
+            <div className="min-h-screen bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50">
+                {/* Clean Minimalist Header */}
+                <div className="bg-gradient-to-br from-green-500 via-emerald-600 to-teal-600 text-green-100 p-6 rounded-b-3xl shadow-xl">
+                    <div className="flex items-center space-x-3 mb-6">
+                        <button
+                            className="p-2 hover:bg-white/10 rounded-xl transition-colors"
+                            onClick={() => router.visit('/home')}
+                        >
+                            <ArrowLeftIcon className="w-6 h-6" />
+                        </button>
+                        <div className="flex-1">
+                            <h1 className="text-2xl font-bold flex items-center space-x-2">
+                                <ChartBarIcon className="w-7 h-7 text-white" />
+                                <span>Statistik & Riwayat</span>
+                            </h1>
+                            <p className="text-white/90 text-sm flex items-center space-x-1 mt-1">
+                                <SparklesIcon className="w-4 h-4" />
+                                <span>Data dan progress kalori</span>
                             </p>
                         </div>
+                        <div className="text-center">
+                            <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center mb-1">
+                                <ChartBarIcon className="w-6 h-6 text-white" />
+                            </div>
+                            <p className="text-xs text-white/90">Statistik</p>
+                        </div>
+                    </div>
+
+                    {/* Enhanced Tab Navigation */}
+                    <div className="flex bg-white/10 rounded-xl p-1 mb-4">
+                        <button
+                            onClick={() => setActiveTab('statistics')}
+                            className={`flex-1 flex items-center justify-center space-x-2 py-3 px-4 rounded-lg font-medium transition-all ${
+                                activeTab === 'statistics'
+                                    ? 'bg-white text-indigo-600 shadow-lg'
+                                    : 'text-white hover:bg-white/20'
+                            }`}
+                        >
+                            <ChartBarIcon className="w-5 h-5" />
+                            <span>Statistik</span>
+                        </button>
+                        <button
+                            onClick={() => setActiveTab('history')}
+                            className={`flex-1 flex items-center justify-center space-x-2 py-3 px-4 rounded-lg font-medium transition-all ${
+                                activeTab === 'history'
+                                    ? 'bg-white text-indigo-600 shadow-lg'
+                                    : 'text-white hover:bg-white/20'
+                            }`}
+                        >
+                            <ListBulletIcon className="w-5 h-5" />
+                            <span>Riwayat</span>
+                        </button>
+                    </div>
+                </div>
+
+                {/* Content */}
+                <div className="px-4 space-y-6 mt-6">
+                    {/* Statistics Tab */}
+                    {activeTab === 'statistics' && (
+                        <>
+                            {/* Enhanced Weekly Summary Cards */}
+                            <div className="grid grid-cols-2 gap-4">
+                                <div className={`${variants.card.elevated} p-5`}>
+                                    <div className="flex items-center space-x-2 mb-3">
+                                        <div className="p-2 bg-orange-100 rounded-lg">
+                                            <FireIcon className="w-5 h-5 text-orange-500" />
+                                        </div>
+                                        <span className="text-sm font-semibold text-gray-700">Total Kalori</span>
+                                    </div>
+                                    <p className="text-2xl font-bold text-gray-900 mb-1">{formatNumber(weeklySummary.total_calories)}</p>
+                                    <p className="text-xs text-gray-500">Target: {formatNumber(weeklySummary.weekly_target)}</p>
+                                </div>
+
+                                <div className={`${variants.card.elevated} p-5`}>
+                                    <div className="flex items-center space-x-2 mb-3">
+                                        <div className="p-2 bg-yellow-100 rounded-lg">
+                                            <TrophyIcon className="w-5 h-5 text-yellow-600" />
+                                        </div>
+                                        <span className="text-sm font-semibold text-gray-700">Konsistensi</span>
+                                    </div>
+                                    <p className="text-2xl font-bold text-gray-900 mb-1">{weeklySummary.consistency_score}%</p>
+                                    <p className="text-xs text-gray-500">{weeklySummary.active_days}/7 hari aktif</p>
+                                </div>
+                            </div>
+
+                            {/* Enhanced Weekly Progress Bar */}
+                            <div className={`${variants.card.elevated} p-6`}>
+                                <div className="flex justify-between items-center mb-4">
+                                    <div className="flex items-center space-x-2">
+                                        <div className="p-2 bg-green-100 rounded-lg">
+                                            <BoltIcon className="w-5 h-5 text-blue-600" />
+                                        </div>
+                                        <span className="text-lg font-bold text-gray-900">Progress Mingguan</span>
+                                    </div>
+                                    <span className="text-2xl font-bold text-blue-600">{formatPercentage(weeklySummary.weekly_percentage)}%</span>
+                                </div>
+                                <div className="bg-gray-200 rounded-full h-4 overflow-hidden mb-3 shadow-inner">
+                                    <div
+                                        className={`h-full transition-all duration-1000 ${
+                                            weeklySummary.weekly_percentage > 100
+                                                ? 'bg-gradient-to-r from-red-400 to-red-600'
+                                                : weeklySummary.weekly_percentage >= 90
+                                                    ? 'bg-gradient-to-r from-green-400 to-green-600'
+                                                    : 'bg-gradient-to-r from-yellow-400 to-yellow-600'
+                                        }`}
+                                        style={{ width: `${Math.min(weeklySummary.weekly_percentage, 100)}%` }}
+                                    />
+                                </div>
+                                <p className="text-sm text-gray-600 flex items-center space-x-1">
+                                    {weeklySummary.weekly_percentage > 100 ? (
+                                        <>
+                                            <ExclamationTriangleIcon className="w-4 h-4 text-red-500" />
+                                            <span>Kelebihan {formatPercentage(weeklySummary.weekly_percentage - 100)}% dari target</span>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <ArrowTrendingUpIcon className="w-4 h-4 text-green-500" />
+                                            <span>{formatPercentage(100 - weeklySummary.weekly_percentage)}% lagi untuk mencapai target</span>
+                                        </>
+                                    )}
+                                </p>
+                            </div>
 
                         {/* Daily Breakdown */}
                         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
@@ -190,7 +218,7 @@ export default function WeeklyStats({
                                         key={day.date}
                                         className={`p-4 rounded-xl border-2 transition-all cursor-pointer ${
                                             day.is_today
-                                                ? 'border-blue-500 bg-blue-50'
+                                                ? 'border-green-500 bg-green-50'
                                                 : selectedDay === index
                                                     ? 'border-indigo-300 bg-indigo-50'
                                                     : 'border-gray-200 hover:border-gray-300'
@@ -344,7 +372,7 @@ export default function WeeklyStats({
                                                                     <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium capitalize ${
                                                                         entry.meal_type === 'breakfast' ? 'bg-yellow-100 text-yellow-800' :
                                                                         entry.meal_type === 'lunch' ? 'bg-orange-100 text-orange-800' :
-                                                                        entry.meal_type === 'dinner' ? 'bg-blue-100 text-blue-800' :
+                                                                        entry.meal_type === 'dinner' ? 'bg-green-100 text-green-800' :
                                                                         'bg-green-100 text-green-800'
                                                                     }`}>
                                                                         {entry.meal_type}
@@ -378,7 +406,7 @@ export default function WeeklyStats({
                                                                     </span>
                                                                 )}
                                                                 {entry.days_ago === 1 && (
-                                                                    <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                                                    <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
                                                                         Kemarin
                                                                     </span>
                                                                 )}
@@ -405,6 +433,7 @@ export default function WeeklyStats({
                         </div>
                     </>
                 )}
+                </div>
             </div>
         </MobileLayout>
     );

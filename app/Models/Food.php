@@ -10,7 +10,7 @@ class Food extends Model
 
     protected $fillable = [
         'name',
-        'calories_per_100g',
+        'calories',
         'description',
         'brand',
         'tags',
@@ -21,7 +21,7 @@ class Food extends Model
     protected $casts = [
         'tags' => 'array',
         'is_verified' => 'boolean',
-        'calories_per_100g' => 'decimal:2',
+        'calories' => 'decimal:2',
     ];
 
     // Relationships
@@ -54,7 +54,7 @@ class Food extends Model
     // Accessors
     public function getCaloriesFormattedAttribute()
     {
-        return number_format((float) $this->calories_per_100g, 0) . ' kal/100g';
+        return number_format((float) $this->calories, 0) . ' kal/porsi';
     }
 
     public function getTagListAttribute()
@@ -68,7 +68,7 @@ class Food extends Model
         return static::firstOrCreate(
             ['name' => trim($name)],
             [
-                'calories_per_100g' => $calories ?? 100,
+                'calories' => $calories ?? 100,
                 'is_verified' => false,
             ]
         );

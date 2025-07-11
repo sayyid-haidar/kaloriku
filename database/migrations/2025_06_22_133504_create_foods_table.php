@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('foods', function (Blueprint $table) {
             $table->id();
             $table->string('name')->unique(); // Make name unique to avoid duplicates
-            $table->decimal('calories_per_100g', 8, 2); // More precise calorie info
+            $table->decimal('calories', 8, 2); // Kalori per porsi
             $table->text('description')->nullable(); // Optional description
             $table->string('brand')->nullable(); // Optional brand
             $table->json('tags')->nullable(); // Flexible tags system

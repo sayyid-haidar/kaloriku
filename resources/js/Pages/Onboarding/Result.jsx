@@ -40,7 +40,7 @@ export default function Result({ profile }) {
                         {/* Continue Button */}
                         <Link
                             href={route('dashboard')}
-                            className="block w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-4 rounded-xl transition-colors"
+                            className="block w-full bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-semibold py-4 rounded-xl transition-colors"
                         >
                             Lanjut ke Dashboard!
                         </Link>
