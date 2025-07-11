@@ -1,0 +1,30 @@
+<!-- SVG Favicon for KaloriKu -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <linearGradient id="kaloriGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#22c55e" />
+      <stop offset="50%" stop-color="#16a34a" />
+      <stop offset="100%" stop-color="#15803d" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background circle -->
+  <circle cx="50" cy="50" r="45" fill="url(#kaloriGradient)" />
+
+  <!-- Inner white circle -->
+  <circle cx="50" cy="50" r="35" fill="white" />
+
+  <!-- Stylized "K" -->
+  <path
+    d="M35 25 L35 75 M35 50 L65 25 M35 50 L65 75"
+    stroke="url(#kaloriGradient)"
+    stroke-width="6"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+
+  <!-- Small accent dots -->
+  <circle cx="70" cy="35" r="3" fill="#f59e0b" />
+  <circle cx="75" cy="65" r="2" fill="#ec4899" />
+  <circle cx="25" cy="35" r="2" fill="#3b82f6" />
+</svg>
