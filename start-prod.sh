@@ -66,11 +66,15 @@ fi
 if ! grep -q "^APP_KEY=base64:" .env.docker; then
     echo "🔑 Generating APP_KEY for .env.docker..."
     APP_KEY="base64:$(openssl rand -base64 32)"
-    # Use sed compatible with both macOS and Linux
-    if [[ "$OSTYPE" == "darwin"* ]]; then
-        sed -i '' "s/^APP_KEY=.*/APP_KEY=${APP_KEY}/" .env.docker
+    # Use a more reliable method to update APP_KEY
+    if grep -q "^APP_KEY=" .env.docker; then
+        # Replace existing APP_KEY line
+        grep -v "^APP_KEY=" .env.docker > .env.docker.tmp && \
+        echo "APP_KEY=${APP_KEY}" >> .env.docker.tmp && \
+        mv .env.docker.tmp .env.docker
     else
-        sed -i "s/^APP_KEY=.*/APP_KEY=${APP_KEY}/" .env.docker
+        # Add APP_KEY if it doesn't exist
+        echo "APP_KEY=${APP_KEY}" >> .env.docker
     fi
 fi
 
@@ -209,3 +213,4 @@ if [ "$ENABLE_MONITORING" = true ]; then
     echo "   - Telescope logs: docker compose logs -f telescope"
 fi
 echo "   - Update: git pull && ./start-prod.sh $(if [ "$ENABLE_MONITORING" = true ]; then echo "--monitoring"; fi) $(if [ "$ENABLE_TOOLS" = true ]; then echo "--tools"; fi)"
+echo ""
