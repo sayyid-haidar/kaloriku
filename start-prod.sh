@@ -66,7 +66,12 @@ fi
 if ! grep -q "^APP_KEY=base64:" .env.docker; then
     echo "🔑 Generating APP_KEY for .env.docker..."
     APP_KEY="base64:$(openssl rand -base64 32)"
-    sed -i '' "s/^APP_KEY=.*/APP_KEY=${APP_KEY}/" .env.docker
+    # Use sed compatible with both macOS and Linux
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        sed -i '' "s/^APP_KEY=.*/APP_KEY=${APP_KEY}/" .env.docker
+    else
+        sed -i "s/^APP_KEY=.*/APP_KEY=${APP_KEY}/" .env.docker
+    fi
 fi
 
 # Copy production environment file
