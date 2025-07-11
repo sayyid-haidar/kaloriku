@@ -129,6 +129,11 @@ if [ -z "$(grep "^APP_KEY=base64:" /var/www/.env)" ]; then
     echo "Generating APP_KEY inside container..."
     php artisan key:generate --force
 fi
+
+# Ensure Redis password is set
+if ! grep -q "^REDIS_PASSWORD=" /var/www/.env; then
+    echo "REDIS_PASSWORD=redis123" >> /var/www/.env
+fi
 '
 
 # Run migrations and seeders
@@ -146,9 +151,33 @@ if [ "$ENABLE_MONITORING" = true ]; then
 fi
 
 echo "⚡ Optimizing application for production..."
-docker compose exec app php artisan optimize:clear
+
+# Clear cache individually with better error handling
+echo "🧹 Clearing caches..."
+docker compose exec app php artisan config:clear
+docker compose exec app php artisan route:clear
+docker compose exec app php artisan view:clear
+
+# Clear Redis cache with authentication
+echo "🔄 Clearing Redis cache..."
+if docker compose exec app php artisan cache:clear 2>/dev/null; then
+    echo "✅ Cache cleared successfully"
+else
+    echo "⚠️  Cache clear failed - continuing without Redis cache"
+fi
+
+# Cache optimizations
+echo "📦 Caching optimizations..."
 docker compose exec app php artisan config:cache
-docker compose exec app php artisan route:cache
+
+# Try to cache routes, skip if error
+if docker compose exec app php artisan route:cache 2>/dev/null; then
+    echo "✅ Routes cached successfully"
+else
+    echo "⚠️  Route caching failed - running without route cache"
+    docker compose exec app php artisan route:clear
+fi
+
 docker compose exec app php artisan view:cache
 
 echo "✅ Production environment is ready!"
