@@ -21,7 +21,7 @@ export default function UpdatePasswordPage({ status }) {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        put(route('password.update'), {
+        put(route('profile.password.update'), {
             preserveScroll: true,
             onSuccess: () => {
                 reset();

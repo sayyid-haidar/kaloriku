@@ -30,37 +30,6 @@ services:
     networks:
       - kaloriku_network
 
-  # Development Environment
-  app-dev:
-    build:
-      context: .
-      dockerfile: Dockerfile.dev
-    container_name: kaloriku_dev
-    restart: unless-stopped
-    ports:
-      - "8001:8000"
-      - "5173:5173"
-    volumes:
-      - .:/var/www
-      - /var/www/vendor
-      - /var/www/node_modules
-    environment:
-      - APP_ENV=local
-      - APP_DEBUG=true
-      - DB_HOST=mysql
-      - DB_DATABASE=kaloriku
-      - DB_USERNAME=kaloriku
-      - DB_PASSWORD=secret123
-      - REDIS_HOST=redis
-      - TELESCOPE_ENABLED=true
-    depends_on:
-      - mysql
-      - redis
-    networks:
-      - kaloriku_network
-    profiles:
-      - dev
-
   # MySQL Database
   mysql:
     image: mysql:8.0
