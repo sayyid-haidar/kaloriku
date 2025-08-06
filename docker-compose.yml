@@ -1,0 +1,194 @@
+services:
+  # Main Application
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: kaloriku:latest
+    container_name: kaloriku_app
+    restart: unless-stopped
+    ports:
+      - "8000:80"
+    volumes:
+      - ./storage:/var/www/storage
+      - ./bootstrap/cache:/var/www/bootstrap/cache
+      - ./public/storage:/var/www/public/storage
+      - ./.env.docker:/var/www/.env
+    env_file:
+      - .env.docker
+    depends_on:
+      - mysql
+      - redis
+    networks:
+      - kaloriku_network
+
+  # MySQL Database
+  mysql:
+    image: mysql:8.0
+    container_name: kaloriku_mysql
+    restart: unless-stopped
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_DATABASE: kaloriku
+      MYSQL_USER: kaloriku
+      MYSQL_PASSWORD: secret123
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./docker/mysql/init:/docker-entrypoint-initdb.d
+    command: --default-authentication-plugin=mysql_native_password
+    networks:
+      - kaloriku_network
+
+  # Redis Cache & Session
+  redis:
+    image: redis:7-alpine
+    container_name: kaloriku_redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes --requirepass redis123
+    networks:
+      - kaloriku_network
+
+  # Queue Worker
+  queue:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: kaloriku:latest
+    container_name: kaloriku_queue
+    restart: unless-stopped
+    volumes:
+      - ./storage:/var/www/storage
+      - ./.env.docker:/var/www/.env
+    env_file:
+      - .env.docker
+    depends_on:
+      - mysql
+      - redis
+    command: php artisan queue:work --sleep=3 --tries=3 --timeout=30
+    networks:
+      - kaloriku_network
+    profiles:
+      - production
+
+  # Scheduler/Cron (simplified)
+  scheduler:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: kaloriku:latest
+    container_name: kaloriku_scheduler
+    restart: unless-stopped
+    volumes:
+      - ./storage:/var/www/storage
+      - ./.env.docker:/var/www/.env
+    env_file:
+      - .env.docker
+    depends_on:
+      - mysql
+      - redis
+    command: sh -c "while true; do php artisan schedule:run; sleep 60; done"
+    networks:
+      - kaloriku_network
+    profiles:
+      - production
+
+  # phpMyAdmin
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: kaloriku_phpmyadmin
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    environment:
+      PMA_HOST: mysql
+      PMA_USER: kaloriku
+      PMA_PASSWORD: secret123
+      MYSQL_ROOT_PASSWORD: root123
+    depends_on:
+      - mysql
+    networks:
+      - kaloriku_network
+    profiles:
+      - tools
+
+  # Redis Commander
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    container_name: kaloriku_redis_commander
+    restart: unless-stopped
+    ports:
+      - "8081:8081"
+    environment:
+      REDIS_HOSTS: local:redis:6379:0:redis123
+    depends_on:
+      - redis
+    networks:
+      - kaloriku_network
+    profiles:
+      - tools
+
+  # Nginx Load Balancer (Production)
+  nginx:
+    image: nginx:alpine
+    container_name: kaloriku_nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8082:8082"
+    volumes:
+      - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./docker/nginx/ssl:/etc/nginx/ssl
+      - ./public:/var/www/public
+    depends_on:
+      - app
+    networks:
+      - kaloriku_network
+    profiles:
+      - production
+      - monitoring
+
+  # Laravel Telescope (Monitoring & Debugging)
+  telescope:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: kaloriku:latest
+    container_name: kaloriku_telescope
+    restart: unless-stopped
+    expose:
+      - "8080"
+    volumes:
+      - ./storage:/var/www/storage
+      - ./bootstrap/cache:/var/www/bootstrap/cache
+      - ./.env.docker:/var/www/.env
+    env_file:
+      - .env.docker
+    environment:
+      - APP_ENV=local
+      - APP_DEBUG=true
+      - TELESCOPE_ENABLED=true
+      - APACHE_PORT=8080
+    depends_on:
+      - mysql
+      - redis
+    networks:
+      - kaloriku_network
+    profiles:
+      - monitoring
+
+volumes:
+  mysql_data:
+    driver: local
+  redis_data:
+    driver: local
+
+networks:
+  kaloriku_network:
+    driver: bridge
